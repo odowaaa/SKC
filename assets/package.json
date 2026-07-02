@@ -1,0 +1,25 @@
+{
+  "name": "skc",
+  "version": "1.0.0",
+  "description": "SomaliKingCollege",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./assets/css/tailwind.css --minify",
+    "watch": "tailwindcss -i ./src/input.css -o ./assets/css/tailwind.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:41729/git/odowaaa/SKC"
+  },
+  "keywords": [
+    "somaliking-college",
+    "university-website",
+    "tailwindcss"
+  ],
+  "author": "SomaliKing College",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}
