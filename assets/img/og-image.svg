@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#132a54"/>
+      <stop offset="100%" stop-color="#071026"/>
+    </linearGradient>
+    <linearGradient id="gold3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4dd93"/>
+      <stop offset="50%" stop-color="#d79a1f"/>
+      <stop offset="100%" stop-color="#b87817"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1080" cy="80" r="220" fill="#d79a1f" opacity="0.08"/>
+  <circle cx="80" cy="560" r="260" fill="#3366b2" opacity="0.15"/>
+
+  <g transform="translate(500,60) scale(0.85)">
+    <g fill="url(#gold3)">
+      <g id="ogleaf">
+        <ellipse cx="26" cy="70" rx="10" ry="4.5" transform="rotate(-20 26 70)"/>
+        <ellipse cx="22" cy="86" rx="10" ry="4.5" transform="rotate(-8 22 86)"/>
+        <ellipse cx="20" cy="103" rx="10" ry="4.5" transform="rotate(4 20 103)"/>
+        <ellipse cx="21" cy="120" rx="10" ry="4.5" transform="rotate(16 21 120)"/>
+        <ellipse cx="25" cy="136" rx="10" ry="4.5" transform="rotate(28 25 136)"/>
+        <path d="M18 62 C14 100 16 135 34 158" fill="none" stroke="url(#gold3)" stroke-width="2.5"/>
+      </g>
+      <use href="#ogleaf" transform="translate(200,0) scale(-1,1)"/>
+    </g>
+    <path d="M100 10 L165 32 V95 C165 138 138 170 100 185 C62 170 35 138 35 95 V32 Z" fill="#0b1c3a" stroke="url(#gold3)" stroke-width="3"/>
+    <g fill="url(#gold3)">
+      <path d="M76 34 L82 20 L91 30 L100 16 L109 30 L118 20 L124 34 Z"/>
+      <rect x="76" y="33" width="48" height="5" rx="1.5"/>
+    </g>
+    <path fill="url(#gold3)" d="M100 42 l2.6 6.2 6.7 0.5 -5.1 4.4 1.6 6.6 -5.8-3.6 -5.8 3.6 1.6-6.6 -5.1-4.4 6.7-0.5z"/>
+    <path d="M63 90 C78 84 90 86 100 92 C110 86 122 84 137 90 V112 C122 106 110 108 100 114 C90 108 78 106 63 112 Z" fill="#ffffff"/>
+    <text x="100" y="146" font-family="Georgia, serif" font-size="26" font-weight="700" fill="#ffffff" text-anchor="middle">SKC</text>
+    <text x="100" y="160" font-family="Arial, sans-serif" font-size="8" font-weight="700" letter-spacing="1" fill="url(#gold3)" text-anchor="middle">ESE 2026</text>
+  </g>
+
+  <text x="600" y="430" font-family="Georgia, serif" font-size="56" font-weight="700" text-anchor="middle">
+    <tspan fill="#ffffff">Somali</tspan><tspan fill="#d79a1f">King</tspan><tspan fill="#ffffff">College</tspan>
+  </text>
+  <text x="600" y="475" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#b3cceb" text-anchor="middle">Building Skills for a Better Future</text>
+  <text x="600" y="530" font-family="Arial, sans-serif" font-size="18" letter-spacing="2" fill="#5285c9" text-anchor="middle">ENGLISH · IT · ENGINEERING · SOCIAL &amp; HUMAN SERVICES · HEALTH SKILLS</text>
+</svg>
