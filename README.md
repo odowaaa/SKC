@@ -1,0 +1,2 @@
+# SKC
+SomaliKingCollege
