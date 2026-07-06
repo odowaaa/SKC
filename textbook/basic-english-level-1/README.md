@@ -4,7 +4,7 @@
 
 This folder contains the complete, original SKC textbook **Basic English Level 1: Survival English**, written for adult, Pre-A1, zero-background Somali learners, following the official SKC English Curriculum.
 
-The full book is also available as a single combined file: **[`BASIC-ENGLISH-LEVEL-1-FULL-BOOK.md`](./BASIC-ENGLISH-LEVEL-1-FULL-BOOK.md)**.
+The full book is also available as a single combined file: **[`BASIC-ENGLISH-LEVEL-1-FULL-BOOK.md`](./BASIC-ENGLISH-LEVEL-1-FULL-BOOK.md)**, and as a designed, print-ready PDF: **[`Basic-English-Level-1-SKC.pdf`](./Basic-English-Level-1-SKC.pdf)** (with a formal cover page, teal/gold styling, styled tables and dialogues, and clearly boxed illustration prompts).
 
 ---
 
