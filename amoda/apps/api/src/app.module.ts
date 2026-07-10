@@ -23,6 +23,8 @@ import { BlogModule } from './modules/blog/blog.module';
 import { HealthModule } from './modules/health/health.module';
 import { AgentsModule } from './modules/agents/agents.module';
 import { ContactModule } from './modules/contact/contact.module';
+import { LeadsModule } from './modules/leads/leads.module';
+import { LeasesModule } from './modules/leases/leases.module';
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { ContactModule } from './modules/contact/contact.module';
     HealthModule,
     AgentsModule,
     ContactModule,
+    LeadsModule,
+    LeasesModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

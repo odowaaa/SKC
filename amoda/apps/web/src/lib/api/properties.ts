@@ -54,3 +54,39 @@ export async function listMyBookings() {
   const { data } = await apiClient.get("/bookings/mine");
   return data.data;
 }
+
+export async function listAgentBookings() {
+  const { data } = await apiClient.get("/bookings/agent/mine");
+  return data.data;
+}
+
+export async function listMyProperties() {
+  const { data } = await apiClient.get("/properties/mine");
+  return data.data as PropertySummary[];
+}
+
+export async function getPropertyById(id: string) {
+  const { data } = await apiClient.get(`/properties/${id}`);
+  return data.data as PropertyDetail;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function createProperty(payload: Record<string, any>) {
+  const { data } = await apiClient.post("/properties", payload);
+  return data.data as PropertyDetail;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function updateProperty(id: string, payload: Record<string, any>) {
+  const { data } = await apiClient.patch(`/properties/${id}`, payload);
+  return data.data as PropertyDetail;
+}
+
+export async function uploadFile(file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const { data } = await apiClient.post("/uploads", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data.data as { url: string };
+}

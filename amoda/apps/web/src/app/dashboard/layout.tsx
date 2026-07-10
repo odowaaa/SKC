@@ -3,15 +3,56 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Heart, LayoutDashboard, LogOut, Calendar, User } from "lucide-react";
+import {
+  Building2,
+  Calendar,
+  FileText,
+  Heart,
+  LayoutDashboard,
+  LogOut,
+  ScrollText,
+  Shield,
+  User,
+  Users,
+} from "lucide-react";
 import { useAuthStore } from "@/store/auth-store";
 import { cn } from "@/lib/utils";
 
-const NAV_ITEMS = [
-  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-  { href: "/dashboard/favorites", label: "Favorites", icon: Heart },
-  { href: "/dashboard/bookings", label: "My Viewings", icon: Calendar },
-];
+const LISTING_ROLES = ["AGENT", "OWNER", "DEVELOPER", "SUPER_ADMIN", "ADMIN", "REGIONAL_MANAGER", "BRANCH_MANAGER", "PROPERTY_MANAGER"];
+const LEAD_ROLES = ["AGENT", "SUPER_ADMIN", "ADMIN", "REGIONAL_MANAGER", "BRANCH_MANAGER", "MARKETING_MANAGER"];
+const LEASE_ROLES = ["OWNER", "TENANT", "SUPER_ADMIN", "ADMIN", "PROPERTY_MANAGER", "ACCOUNTANT"];
+const APPOINTMENT_ROLES = ["AGENT"];
+const ADMIN_ROLES = ["SUPER_ADMIN", "ADMIN"];
+const CONTENT_ROLES = ["SUPER_ADMIN", "ADMIN", "MARKETING_MANAGER"];
+
+function navItemsFor(role: string) {
+  const items = [{ href: "/dashboard", label: "Overview", icon: LayoutDashboard }];
+
+  if (LISTING_ROLES.includes(role)) {
+    items.push({ href: "/dashboard/properties", label: "Properties", icon: Building2 });
+  }
+  if (LEAD_ROLES.includes(role)) {
+    items.push({ href: "/dashboard/leads", label: "Leads", icon: Users });
+  }
+  if (APPOINTMENT_ROLES.includes(role)) {
+    items.push({ href: "/dashboard/appointments", label: "Appointments", icon: Calendar });
+  }
+  if (LEASE_ROLES.includes(role)) {
+    items.push({ href: "/dashboard/leases", label: "Leases", icon: ScrollText });
+  }
+
+  items.push({ href: "/dashboard/favorites", label: "Favorites", icon: Heart });
+  items.push({ href: "/dashboard/bookings", label: "My Viewings", icon: Calendar });
+
+  if (ADMIN_ROLES.includes(role)) {
+    items.push({ href: "/dashboard/admin/users", label: "Users", icon: Shield });
+  }
+  if (CONTENT_ROLES.includes(role)) {
+    items.push({ href: "/dashboard/admin/blog", label: "Blog", icon: FileText });
+  }
+
+  return items;
+}
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = useAuthStore((state) => state.user);
@@ -24,6 +65,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [user, router]);
 
   if (!user) return null;
+
+  const navItems = navItemsFor(user.role);
 
   return (
     <div className="container-page grid gap-8 py-10 lg:grid-cols-[240px_1fr]">
@@ -40,7 +83,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </div>
 
-        {NAV_ITEMS.map((item) => (
+        {navItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}

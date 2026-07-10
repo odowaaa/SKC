@@ -32,6 +32,14 @@ export class BlogController {
     return this.blogService.listPublished(Number(page), Number(limit));
   }
 
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles(...CONTENT_ROLES)
+  @Get('admin/all')
+  listAll(@Query('page') page = '1', @Query('limit') limit = '20') {
+    return this.blogService.listAll(Number(page), Number(limit));
+  }
+
   @Public()
   @Get(':slug')
   findOne(@Param('slug') slug: string) {

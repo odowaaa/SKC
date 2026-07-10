@@ -64,6 +64,12 @@ export class BookingsService {
     });
   }
 
+  async listForCurrentAgent(userId: string) {
+    const agent = await this.prisma.agent.findUnique({ where: { userId } });
+    if (!agent) return [];
+    return this.listForAgent(agent.id);
+  }
+
   async listForAgent(agentId: string) {
     return this.prisma.booking.findMany({
       where: { agentId },

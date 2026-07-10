@@ -29,6 +29,11 @@ export class BookingsController {
     return this.bookingsService.listMine(user.id);
   }
 
+  @Get('bookings/agent/mine')
+  listForCurrentAgent(@CurrentUser() user: AuthenticatedUser) {
+    return this.bookingsService.listForCurrentAgent(user.id);
+  }
+
   @Patch('bookings/:id/confirm')
   confirm(@CurrentUser() user: AuthenticatedUser, @Param('id') id: string) {
     return this.bookingsService.confirm(user, id);

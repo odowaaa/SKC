@@ -38,6 +38,26 @@ export class BlogService {
     };
   }
 
+  async listAll(page = 1, limit = 20) {
+    const [data, total] = await Promise.all([
+      this.prisma.blogPost.findMany({
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      this.prisma.blogPost.count(),
+    ]);
+    return {
+      data,
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages: Math.max(1, Math.ceil(total / limit)),
+      },
+    };
+  }
+
   async findBySlug(slug: string) {
     const post = await this.prisma.blogPost.findFirst({
       where: { slug, status: BlogPostStatus.PUBLISHED },

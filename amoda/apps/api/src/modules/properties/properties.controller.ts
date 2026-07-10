@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Role } from '@prisma/client';
+import { PropertyStatus, Role } from '@prisma/client';
 import { Public } from '../../common/decorators/public.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -20,6 +20,7 @@ import { PropertiesService } from './properties.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { SearchPropertyDto } from './dto/search-property.dto';
+import { AttachMediaDto } from './dto/attach-media.dto';
 
 const LISTING_ROLES = [
   Role.SUPER_ADMIN,
@@ -47,6 +48,30 @@ export class PropertiesController {
   @Get('slug/:slug')
   findBySlug(@Param('slug') slug: string) {
     return this.propertiesService.findBySlug(slug);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles(...LISTING_ROLES)
+  @Get('mine')
+  listMine(@CurrentUser() user: AuthenticatedUser) {
+    return this.propertiesService.listMine(user);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles(Role.SUPER_ADMIN, Role.ADMIN, Role.MODERATOR, Role.PROPERTY_MANAGER)
+  @Get('admin/all')
+  listAll(
+    @Query('page') page = '1',
+    @Query('limit') limit = '20',
+    @Query('status') status?: PropertyStatus,
+  ) {
+    return this.propertiesService.listAll({
+      page: Number(page),
+      limit: Number(limit),
+      status,
+    });
   }
 
   @Public()
@@ -82,6 +107,18 @@ export class PropertiesController {
     @Body() dto: UpdatePropertyDto,
   ) {
     return this.propertiesService.update(user, id, dto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles(...LISTING_ROLES)
+  @Post(':id/media')
+  attachMedia(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id') id: string,
+    @Body() dto: AttachMediaDto,
+  ) {
+    return this.propertiesService.attachMedia(user, id, dto.media);
   }
 
   @ApiBearerAuth()

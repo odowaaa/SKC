@@ -215,6 +215,64 @@ export class PropertiesService {
     };
   }
 
+  async listMine(user: AuthenticatedUser) {
+    const where: Prisma.PropertyWhereInput = { deletedAt: null };
+
+    if (!STAFF_ROLES.includes(user.role)) {
+      const [agent, owner] = await Promise.all([
+        this.prisma.agent.findUnique({ where: { userId: user.id } }),
+        this.prisma.owner.findUnique({ where: { userId: user.id } }),
+      ]);
+      where.OR = [
+        { createdById: user.id },
+        ...(agent ? [{ agentId: agent.id }] : []),
+        ...(owner ? [{ ownerId: owner.id }] : []),
+      ];
+    }
+
+    return this.prisma.property.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        media: { take: 1, orderBy: { sortOrder: 'asc' } },
+        _count: { select: { bookings: true, favorites: true } },
+      },
+    });
+  }
+
+  async listAll(params: {
+    page: number;
+    limit: number;
+    status?: PropertyStatus;
+  }) {
+    const { page, limit, status } = params;
+    const where: Prisma.PropertyWhereInput = {
+      deletedAt: null,
+      ...(status ? { status } : {}),
+    };
+
+    const [data, total] = await Promise.all([
+      this.prisma.property.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
+        include: { media: { take: 1, orderBy: { sortOrder: 'asc' } } },
+      }),
+      this.prisma.property.count({ where }),
+    ]);
+
+    return {
+      data,
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages: Math.max(1, Math.ceil(total / limit)),
+      },
+    };
+  }
+
   async findBySlug(slug: string) {
     const property = await this.prisma.property.findFirst({
       where: { slug, deletedAt: null },
@@ -270,7 +328,12 @@ export class PropertiesService {
 
   async update(user: AuthenticatedUser, id: string, dto: UpdatePropertyDto) {
     await this.assertCanModify(user, id);
-    const { amenityIds, categoryIds, ...data } = dto;
+    const { amenityIds, categoryIds, status, ...data } = dto;
+
+    // Only staff may move a listing between moderation states directly;
+    // non-staff edits to a published listing send it back for re-review.
+    const isStaff = STAFF_ROLES.includes(user.role);
+    const resolvedStatus = isStaff ? status : PropertyStatus.PENDING_REVIEW;
 
     if (amenityIds) {
       await this.prisma.propertyAmenity.deleteMany({
@@ -287,8 +350,9 @@ export class PropertiesService {
       where: { id },
       data: {
         ...data,
+        status: resolvedStatus,
         publishedAt:
-          data.status === PropertyStatus.PUBLISHED ? new Date() : undefined,
+          resolvedStatus === PropertyStatus.PUBLISHED ? new Date() : undefined,
         amenities: amenityIds
           ? { create: amenityIds.map((amenityId) => ({ amenityId })) }
           : undefined,

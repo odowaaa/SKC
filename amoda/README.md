@@ -66,7 +66,17 @@ amoda/
   leases/maintenance requests, payments/invoices/subscriptions, notifications, support tickets, blog/SEO,
   audit logs, and file storage.
 - **Security**: Argon2 hashing, Helmet, CORS, rate limiting (`@nestjs/throttler`), global validation
-  pipe, structured error responses, audit logging table.
+  pipe, structured error responses, audit logging table. Non-staff users cannot self-publish or
+  self-approve a listing — any edit to a property they own resets it to `PENDING_REVIEW`.
+- **CRM (leads)**: public "request information" capture from a property page, lead pipeline
+  (new → contacted → qualified → negotiating → won/lost), assignment, notes, and follow-up tasks.
+- **Rental management**: lease creation (owner ↔ tenant, auto-provisions a tenant account), rent
+  invoice generation, lease termination, and tenant maintenance requests with status tracking.
+- **Role-based dashboards** (`/dashboard`): a single dashboard shell whose navigation and data adapt to
+  the signed-in role — admins get property moderation (approve/reject/feature), user management, and
+  blog publishing; agents get their listings, assigned leads, and appointment management; owners get
+  their listings and lease/invoice tools; everyone gets favorites and booking history. A shared
+  create/edit property form (with Cloudinary image upload) is used across all listing-capable roles.
 - **DX**: Swagger docs at `/api/docs`, seed script with demo accounts and sample listings, unit + e2e
   tests, Dockerfiles for both apps, docker-compose for local full-stack + Postgres + Redis, CI workflow.
 
@@ -153,10 +163,13 @@ Interactive Swagger docs are served at `GET /api/docs` once the API is running.
 
 This MVP intentionally scopes down the full AMODA specification to a real, working core. Not yet built:
 
-- Full CMS dashboard (homepage/footer builder, theme settings, menus, media library UI, SEO tooling)
-- Full rental management UI (lease documents, rent collection workflows, tenant portal)
-- Full CRM UI (pipeline board, call/email logging) — schema and basic Lead model exist
+- CMS site-builder tooling (homepage/footer builder, theme settings, menus, media library UI, SEO
+  fields UI) — the blog and property moderation dashboards exist; drag-and-drop page building doesn't
+- Lease documents/e-signing, automated rent-collection reminders, tenant-facing lease portal beyond the
+  dashboard list (lease creation, invoicing, and maintenance requests are built)
+- CRM pipeline board view and call/email logging (lead list, notes, tasks, and status pipeline exist)
 - 2FA, device/session management UI, Apple & Facebook OAuth (schema + config wired, need app credentials)
 - AI features (description generation, price estimation, chat assistant, recommendations)
 - Map-based polygon search, virtual tours/360° viewer, floor plan uploads UI
 - Redis-backed caching and rate-limit store (currently in-memory throttling)
+- Commission tracking UI and sales/offers workflow (schema exists: `Offer`, `Commission`)
