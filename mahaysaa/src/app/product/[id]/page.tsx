@@ -31,6 +31,7 @@ export default function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState("CASH_ON_DELIVERY");
   const [address, setAddress] = useState("");
+  const [savedAddresses, setSavedAddresses] = useState<{ id: string; label: string; line1: string; city: string }[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -40,6 +41,13 @@ export default function ProductPage() {
       .then((r) => r.json())
       .then((d) => setProduct(d.product));
   }, [id]);
+
+  useEffect(() => {
+    if (!user) return;
+    fetch("/api/addresses")
+      .then((r) => r.json())
+      .then((d) => setSavedAddresses(d.addresses ?? []));
+  }, [user]);
 
   if (!product) return <div className="p-8 text-sm text-slate-500">{t("common.loading")}</div>;
 
@@ -170,6 +178,23 @@ export default function ProductPage() {
 
               <div>
                 <label className="label">{locale === "so" ? "Cinwaanka Gaarsiinta" : "Delivery Address"}</label>
+                {savedAddresses.length > 0 && (
+                  <select
+                    className="input mb-2"
+                    onChange={(e) => {
+                      const a = savedAddresses.find((sa) => sa.id === e.target.value);
+                      if (a) setAddress(`${a.line1}, ${a.city}`);
+                    }}
+                    defaultValue=""
+                  >
+                    <option value="">{locale === "so" ? "-- Cinwaan kaydsan dooro --" : "-- Choose a saved address --"}</option>
+                    {savedAddresses.map((a) => (
+                      <option key={a.id} value={a.id}>
+                        {a.label}: {a.line1}, {a.city}
+                      </option>
+                    ))}
+                  </select>
+                )}
                 <input
                   className="input"
                   value={address}

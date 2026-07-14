@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 import { useAuth } from "@/lib/auth-client";
+import { NotificationBell } from "@/components/NotificationBell";
 
 export function Header() {
   const { t, locale, setLocale } = useTranslation();
@@ -73,6 +74,7 @@ export function Header() {
 
           {!loading && user && (
             <div className="hidden items-center gap-2 sm:flex">
+              <NotificationBell />
               <Link href={dashboardHref} className="btn-outline px-3 py-1.5 text-sm">
                 {t("nav.dashboard")}
               </Link>

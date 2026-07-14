@@ -65,6 +65,18 @@ testable, not mocked.
   persisted in `localStorage`
 - **Branding**: primary blue `#0057B8`, secondary green `#0E9F6E`, accent
   orange `#F59E0B`, per the brief
+- **Favorites**: heart-toggle on product cards, saved list in the
+  customer dashboard
+- **Saved addresses**: customers can save labeled delivery addresses and
+  pick one at checkout instead of retyping it every order
+- **Notifications**: bell icon with unread badge and mark-as-read,
+  populated on order placement and supplier/driver approval
+- **Supplier order workflow**: Confirmed → Preparing → Ready for Delivery
+  (or Cancel), driven from the supplier dashboard
+- **Product image upload**: suppliers can attach a photo when adding a
+  product (saved to local disk under `public/uploads` — see note below)
+- **Admin category management**: create new categories with their own
+  commission rate, in addition to editing existing ones
 
 ## Explicitly out of scope for this pass (documented, not hidden)
 
@@ -95,13 +107,19 @@ this environment doesn't have:
 - **2FA, OAuth, GDPR tooling, audit logs, fraud detection** — session auth
   is JWT + bcrypt only
 
-## Known risk to address before any real deployment
+## Known risks to address before any real deployment
 
-`next@14.2.x` has several disclosed advisories (mostly around Image
-Optimization `remotePatterns`, Middleware, and RSC caching — features this
-app doesn't use). `npm audit` will flag them. Before production, upgrade to
-a current Next.js major version; that wasn't done here because it's a
-breaking change out of scope for this pass.
+- `next@14.2.x` has several disclosed advisories (mostly around Image
+  Optimization `remotePatterns`, Middleware, and RSC caching — features this
+  app doesn't use). `npm audit` will flag them. Before production, upgrade to
+  a current Next.js major version; that wasn't done here because it's a
+  breaking change out of scope for this pass.
+- Product image uploads are written to the local filesystem
+  (`public/uploads/products`). That only works for a single, persistent
+  server process. On serverless/ephemeral hosting (Vercel, most container
+  platforms) the filesystem resets on every deploy/cold start, so uploads
+  would silently disappear — swap `src/app/api/uploads/route.ts` for a real
+  object store (S3, Cloudflare R2) before deploying anywhere like that.
 
 ## Running locally
 

@@ -2,18 +2,23 @@
 
 import Link from "next/link";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
+import { useAuth } from "@/lib/auth-client";
+import { useFavorites } from "@/lib/favorites-client";
 import type { Product } from "@/lib/types";
 
 export function ProductCard({ product }: { product: Product }) {
   const { t, locale } = useTranslation();
+  const { user } = useAuth();
+  const { favoriteIds, toggle } = useFavorites();
   const displayName = (locale === "so" && product.nameSo) || product.name;
   const finalPrice =
     product.discountPct > 0
       ? Math.round(product.price * (1 - product.discountPct / 100) * 100) / 100
       : product.price;
+  const isFavorited = favoriteIds.has(product.id);
 
   return (
-    <Link href={`/product/${product.id}`} className="card group overflow-hidden transition hover:shadow-md">
+    <Link href={`/product/${product.id}`} className="card group relative overflow-hidden transition hover:shadow-md">
       <div className="flex h-36 items-center justify-center bg-slate-100 text-4xl">
         {product.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -22,6 +27,19 @@ export function ProductCard({ product }: { product: Product }) {
           <span>📦</span>
         )}
       </div>
+      {user?.role === "CUSTOMER" && (
+        <button
+          aria-label="Favorite"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggle(product.id);
+          }}
+          className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm"
+        >
+          <span className={isFavorited ? "text-red-500" : "text-slate-400"}>{isFavorited ? "♥" : "♡"}</span>
+        </button>
+      )}
       <div className="space-y-1 p-3">
         <p className="line-clamp-1 text-sm font-semibold text-slate-800">{displayName}</p>
         <p className="text-xs text-slate-500">{product.supplier.businessName}</p>

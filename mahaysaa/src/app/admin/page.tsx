@@ -44,6 +44,8 @@ export default function AdminPage() {
   const [suppliers, setSuppliers] = useState<SupplierRow[]>([]);
   const [drivers, setDrivers] = useState<DriverRow[]>([]);
   const [categories, setCategories] = useState<CategoryRow[]>([]);
+  const [newCategory, setNewCategory] = useState({ name: "", nameSo: "", slug: "", commissionPct: "5" });
+  const [categoryError, setCategoryError] = useState<string | null>(null);
 
   function load() {
     fetch("/api/admin/stats").then((r) => r.json()).then(setStats);
@@ -84,6 +86,28 @@ export default function AdminPage() {
       body: JSON.stringify({ commissionPct }),
     });
     load();
+  }
+
+  async function addCategory(e: React.FormEvent) {
+    e.preventDefault();
+    setCategoryError(null);
+    const res = await fetch("/api/admin/categories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: newCategory.name,
+        nameSo: newCategory.nameSo,
+        slug: newCategory.slug,
+        commissionPct: parseFloat(newCategory.commissionPct) || 0,
+      }),
+    });
+    const d = await res.json();
+    if (res.ok) {
+      setNewCategory({ name: "", nameSo: "", slug: "", commissionPct: "5" });
+      load();
+    } else {
+      setCategoryError(d.error);
+    }
   }
 
   const pendingSuppliers = suppliers.filter((s) => s.status === "PENDING");
@@ -180,6 +204,52 @@ export default function AdminPage() {
           </tbody>
         </table>
       </div>
+
+      {user.role === "ADMIN" && (
+        <form onSubmit={addCategory} className="card mt-3 flex flex-wrap items-end gap-3 p-4">
+          <div>
+            <label className="label">Name (English)</label>
+            <input
+              className="input w-40"
+              value={newCategory.name}
+              onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label className="label">Magaca (Somali)</label>
+            <input
+              className="input w-40"
+              value={newCategory.nameSo}
+              onChange={(e) => setNewCategory({ ...newCategory, nameSo: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label className="label">Slug</label>
+            <input
+              className="input w-32"
+              placeholder="e.g. toys"
+              value={newCategory.slug}
+              onChange={(e) => setNewCategory({ ...newCategory, slug: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label className="label">Commission %</label>
+            <input
+              className="input w-24"
+              type="number"
+              step="0.1"
+              value={newCategory.commissionPct}
+              onChange={(e) => setNewCategory({ ...newCategory, commissionPct: e.target.value })}
+              required
+            />
+          </div>
+          <button className="btn-primary">New Category</button>
+          {categoryError && <p className="w-full text-sm text-red-600">{categoryError}</p>}
+        </form>
+      )}
     </div>
   );
 }

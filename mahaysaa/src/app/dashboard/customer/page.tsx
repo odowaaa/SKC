@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "@/lib/i18n/LanguageProvider";
 import { useAuth } from "@/lib/auth-client";
+import { ProductCard } from "@/components/ProductCard";
+import type { Product } from "@/lib/types";
 
 interface OrderRow {
   id: string;
@@ -24,11 +26,22 @@ interface ReferralRow {
   createdAt: string;
 }
 
+interface AddressRow {
+  id: string;
+  label: string;
+  line1: string;
+  city: string;
+  isDefault: boolean;
+}
+
 export default function CustomerDashboard() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { user, loading } = useAuth();
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [referrals, setReferrals] = useState<ReferralRow[]>([]);
+  const [favorites, setFavorites] = useState<Product[]>([]);
+  const [addresses, setAddresses] = useState<AddressRow[]>([]);
+  const [newAddress, setNewAddress] = useState({ label: "", line1: "", city: "Mogadishu" });
 
   function loadOrders() {
     fetch("/api/orders")
@@ -36,13 +49,42 @@ export default function CustomerDashboard() {
       .then((d) => setOrders(d.orders ?? []));
   }
 
+  function loadAddresses() {
+    fetch("/api/addresses")
+      .then((r) => r.json())
+      .then((d) => setAddresses(d.addresses ?? []));
+  }
+
   useEffect(() => {
     if (!user) return;
     loadOrders();
+    loadAddresses();
     fetch("/api/referral")
       .then((r) => r.json())
       .then((d) => setReferrals(d.referralCodes ?? []));
+    fetch("/api/favorites")
+      .then((r) => r.json())
+      .then((d) => setFavorites((d.favorites ?? []).map((f: { product: Product }) => f.product)));
   }, [user]);
+
+  async function addAddress(e: React.FormEvent) {
+    e.preventDefault();
+    if (!newAddress.label || !newAddress.line1) return;
+    const res = await fetch("/api/addresses", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newAddress),
+    });
+    if (res.ok) {
+      setNewAddress({ label: "", line1: "", city: "Mogadishu" });
+      loadAddresses();
+    }
+  }
+
+  async function removeAddress(id: string) {
+    const res = await fetch(`/api/addresses/${id}`, { method: "DELETE" });
+    if (res.ok) loadAddresses();
+  }
 
   async function rateOrder(orderId: string) {
     const rating = window.prompt("Rate this order 1-5:", "5");
@@ -104,6 +146,68 @@ export default function CustomerDashboard() {
           </div>
         ))}
       </div>
+
+      <h2 className="mb-3 mt-10 text-lg font-bold text-slate-800">
+        {locale === "so" ? "Cinwaanadayda" : "Saved Addresses"}
+      </h2>
+      <div className="space-y-2">
+        {addresses.length === 0 && <p className="text-sm text-slate-500">-</p>}
+        {addresses.map((a) => (
+          <div key={a.id} className="card flex items-center justify-between p-3">
+            <div>
+              <p className="text-sm font-semibold">
+                {a.label} {a.isDefault && <span className="badge bg-primary/10 text-primary">Default</span>}
+              </p>
+              <p className="text-xs text-slate-500">
+                {a.line1}, {a.city}
+              </p>
+            </div>
+            <button className="text-xs font-medium text-red-600" onClick={() => removeAddress(a.id)}>
+              {locale === "so" ? "Tirtir" : "Remove"}
+            </button>
+          </div>
+        ))}
+      </div>
+      <form onSubmit={addAddress} className="card mt-3 flex flex-wrap items-end gap-3 p-3">
+        <div>
+          <label className="label">{locale === "so" ? "Magaca (tusaale: Guriga)" : "Label (e.g. Home)"}</label>
+          <input
+            className="input w-40"
+            value={newAddress.label}
+            onChange={(e) => setNewAddress({ ...newAddress, label: e.target.value })}
+          />
+        </div>
+        <div>
+          <label className="label">{locale === "so" ? "Cinwaanka" : "Address"}</label>
+          <input
+            className="input w-56"
+            value={newAddress.line1}
+            onChange={(e) => setNewAddress({ ...newAddress, line1: e.target.value })}
+          />
+        </div>
+        <div>
+          <label className="label">{locale === "so" ? "Magaalada" : "City"}</label>
+          <input
+            className="input w-40"
+            value={newAddress.city}
+            onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
+          />
+        </div>
+        <button className="btn-primary">{t("common.save")}</button>
+      </form>
+
+      <h2 className="mb-3 mt-10 text-lg font-bold text-slate-800">
+        {locale === "so" ? "Kaydka" : "Favorites"}
+      </h2>
+      {favorites.length === 0 ? (
+        <p className="text-sm text-slate-500">-</p>
+      ) : (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {favorites.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

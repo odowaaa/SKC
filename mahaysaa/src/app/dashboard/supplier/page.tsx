@@ -18,6 +18,18 @@ interface SupplierData {
   }[];
 }
 
+const NEXT_STATUS: Record<string, string> = {
+  CONFIRMED: "PREPARING",
+  PREPARING: "READY_FOR_DELIVERY",
+};
+
+const NEXT_STATUS_LABEL: Record<string, string> = {
+  CONFIRMED: "Start Preparing",
+  PREPARING: "Mark Ready for Delivery",
+};
+
+const CANCELABLE_STATUSES = ["PENDING", "CONFIRMED", "PREPARING", "READY_FOR_DELIVERY"];
+
 interface Category {
   id: string;
   name: string;
@@ -31,8 +43,9 @@ export default function SupplierDashboard() {
   const [totals, setTotals] = useState({ revenue: 0, totalCommission: 0, payout: 0 });
   const [categories, setCategories] = useState<Category[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [newProduct, setNewProduct] = useState({ name: "", nameSo: "", price: "", stock: "", categoryId: "" });
+  const [newProduct, setNewProduct] = useState({ name: "", nameSo: "", price: "", stock: "", categoryId: "", imageUrl: "" });
   const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   function load() {
     fetch("/api/suppliers/me")
@@ -69,6 +82,18 @@ export default function SupplierDashboard() {
     );
   }
 
+  async function uploadImage(file: File) {
+    setUploading(true);
+    setError(null);
+    const form = new FormData();
+    form.append("file", file);
+    const res = await fetch("/api/uploads", { method: "POST", body: form });
+    const d = await res.json();
+    setUploading(false);
+    if (res.ok) setNewProduct((p) => ({ ...p, imageUrl: d.url }));
+    else setError(d.error);
+  }
+
   async function addProduct(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
@@ -81,16 +106,26 @@ export default function SupplierDashboard() {
         price: parseFloat(newProduct.price),
         stock: parseInt(newProduct.stock) || 0,
         categoryId: newProduct.categoryId,
+        imageUrl: newProduct.imageUrl || undefined,
       }),
     });
     const d = await res.json();
     if (res.ok) {
       setShowForm(false);
-      setNewProduct({ name: "", nameSo: "", price: "", stock: "", categoryId: "" });
+      setNewProduct({ name: "", nameSo: "", price: "", stock: "", categoryId: "", imageUrl: "" });
       load();
     } else {
       setError(d.error);
     }
+  }
+
+  async function updateOrderStatus(orderId: string, status: string) {
+    const res = await fetch(`/api/orders/${orderId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+    });
+    if (res.ok) load();
   }
 
   return (
@@ -137,8 +172,23 @@ export default function SupplierDashboard() {
               ))}
             </select>
           </div>
+          <div>
+            <label className="label">Product Photo</label>
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0])}
+            />
+            {uploading && <p className="mt-1 text-xs text-slate-500">Uploading...</p>}
+            {newProduct.imageUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={newProduct.imageUrl} alt="Preview" className="mt-2 h-20 w-20 rounded-lg object-cover" />
+            )}
+          </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
-          <button className="btn-primary">{t("common.save")}</button>
+          <button className="btn-primary" disabled={uploading}>
+            {t("common.save")}
+          </button>
         </form>
       )}
 
@@ -164,6 +214,24 @@ export default function SupplierDashboard() {
             <div className="text-right text-sm">
               <p className="font-bold">${o.total.toFixed(2)}</p>
               {o.commission && <p className="text-xs text-slate-500">Payout: ${o.commission.supplierPayout.toFixed(2)}</p>}
+              <div className="mt-1 flex justify-end gap-2">
+                {NEXT_STATUS[o.status] && (
+                  <button
+                    className="btn-secondary px-2 py-1 text-xs"
+                    onClick={() => updateOrderStatus(o.id, NEXT_STATUS[o.status])}
+                  >
+                    {NEXT_STATUS_LABEL[o.status]}
+                  </button>
+                )}
+                {CANCELABLE_STATUSES.includes(o.status) && (
+                  <button
+                    className="btn-outline px-2 py-1 text-xs text-red-600"
+                    onClick={() => updateOrderStatus(o.id, "CANCELLED")}
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         ))}

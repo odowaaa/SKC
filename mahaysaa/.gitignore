@@ -7,3 +7,7 @@ dev.db-journal
 .env.local
 *.log
 next-env.d.ts
+public/uploads/products/*.jpg
+public/uploads/products/*.jpeg
+public/uploads/products/*.png
+public/uploads/products/*.webp
