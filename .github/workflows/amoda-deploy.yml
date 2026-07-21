@@ -1,0 +1,106 @@
+name: AMODA Deploy
+
+# Optional CLI-driven deploy path. Both Vercel and Railway also support
+# native GitHub App integrations that auto-deploy on push without any
+# workflow code — that's the simpler default (see amoda/DEPLOYMENT.md).
+# Use this workflow instead if you want deploys gated on AMODA CI passing
+# and driven from Actions. Each job no-ops if its secrets aren't set, so
+# it's safe to leave enabled even before you've configured either target.
+
+on:
+  workflow_run:
+    workflows: ["AMODA CI"]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch: {}
+
+jobs:
+  deploy-web:
+    name: Deploy web to Vercel
+    runs-on: ubuntu-latest
+    if: >
+      ${{ (github.event_name == 'workflow_dispatch' ||
+           github.event.workflow_run.conclusion == 'success') }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Vercel secrets are configured
+        id: check
+        run: |
+          if [ -n "${{ secrets.VERCEL_TOKEN }}" ] && [ -n "${{ secrets.VERCEL_ORG_ID }}" ] && [ -n "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping Vercel deploy — VERCEL_TOKEN/VERCEL_ORG_ID/VERCEL_PROJECT_ID not set."
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.check.outputs.configured == 'true'
+        with:
+          node-version: "20"
+
+      - name: Install Vercel CLI
+        if: steps.check.outputs.configured == 'true'
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel project settings
+        if: steps.check.outputs.configured == 'true'
+        working-directory: amoda
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+
+      - name: Build
+        if: steps.check.outputs.configured == 'true'
+        working-directory: amoda
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: vercel build --prod --token="$VERCEL_TOKEN"
+
+      - name: Deploy
+        if: steps.check.outputs.configured == 'true'
+        working-directory: amoda
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+
+  deploy-api:
+    name: Deploy API to Railway
+    runs-on: ubuntu-latest
+    if: >
+      ${{ (github.event_name == 'workflow_dispatch' ||
+           github.event.workflow_run.conclusion == 'success') }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Railway secret is configured
+        id: check
+        run: |
+          if [ -n "${{ secrets.RAILWAY_TOKEN }}" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping Railway deploy — RAILWAY_TOKEN not set."
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.check.outputs.configured == 'true'
+        with:
+          node-version: "20"
+
+      - name: Install Railway CLI
+        if: steps.check.outputs.configured == 'true'
+        run: npm install --global @railway/cli
+
+      - name: Deploy
+        if: steps.check.outputs.configured == 'true'
+        working-directory: amoda
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --service api --detach
