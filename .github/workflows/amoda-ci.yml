@@ -1,0 +1,90 @@
+name: AMODA CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "amoda/**"
+      - ".github/workflows/amoda-ci.yml"
+  pull_request:
+    paths:
+      - "amoda/**"
+      - ".github/workflows/amoda-ci.yml"
+
+defaults:
+  run:
+    working-directory: amoda
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  lint-and-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: amoda/package-lock.json
+      - run: npm ci
+      - run: npm run build -w packages/shared
+      - run: npx prisma generate --schema apps/api/prisma/schema.prisma
+        working-directory: amoda/apps/api
+      - run: npm run lint -w apps/api
+      - run: npm run lint -w apps/web
+
+  api-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: amoda
+          POSTGRES_PASSWORD: amoda
+          POSTGRES_DB: amoda_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U amoda"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://amoda:amoda@localhost:5432/amoda_test?schema=public
+      JWT_ACCESS_SECRET: ci-access-secret
+      JWT_REFRESH_SECRET: ci-refresh-secret
+      CLIENT_URL: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: amoda/package-lock.json
+      - run: npm ci
+      - run: npm run build -w packages/shared
+      - run: npx prisma migrate deploy --schema apps/api/prisma/schema.prisma
+        working-directory: amoda/apps/api
+      - run: npm run test -w apps/api
+      - run: npm run test:e2e -w apps/api
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: amoda/package-lock.json
+      - run: npm ci
+      - run: npx prisma generate --schema apps/api/prisma/schema.prisma
+        working-directory: amoda/apps/api
+      - run: npm run build:api
+      - run: npm run build:web
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:4000/api/v1
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
