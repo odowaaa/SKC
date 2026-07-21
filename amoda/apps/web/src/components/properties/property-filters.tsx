@@ -2,9 +2,13 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { createSavedSearch } from "@/lib/api/interest";
+import { useAuthStore } from "@/store/auth-store";
 
 const PROPERTY_TYPES = [
   "APARTMENT",
@@ -21,6 +25,18 @@ const PROPERTY_TYPES = [
 export function PropertyFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const user = useAuthStore((state) => state.user);
+
+  const saveSearchMutation = useMutation({
+    mutationFn: () => {
+      const filters: Record<string, string> = {};
+      searchParams.forEach((value, key) => {
+        filters[key] = value;
+      });
+      const name = [filters.city, filters.type, filters.listingType].filter(Boolean).join(" · ") || "My search";
+      return createSavedSearch(name, filters);
+    },
+  });
 
   const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") ?? "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") ?? "");
@@ -126,6 +142,18 @@ export function PropertyFilters() {
       <Button className="w-full" onClick={applyRangeFilters}>
         Apply filters
       </Button>
+
+      {user && (
+        <Button
+          variant="outline"
+          className="w-full gap-2"
+          onClick={() => saveSearchMutation.mutate()}
+          disabled={saveSearchMutation.isPending}
+        >
+          <Bookmark className="h-4 w-4" />
+          {saveSearchMutation.isSuccess ? "Search saved" : "Save this search"}
+        </Button>
+      )}
     </aside>
   );
 }

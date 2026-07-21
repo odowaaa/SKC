@@ -9,6 +9,8 @@ const FOOTER_COLUMNS = [
       { href: "/properties?listingType=RENT", label: "Rent" },
       { href: "/properties?listingType=COMMERCIAL", label: "Commercial" },
       { href: "/properties?type=LAND", label: "Land" },
+      { href: "/mortgage-calculator", label: "Mortgage Calculator" },
+      { href: "/compare", label: "Compare Properties" },
     ],
   },
   {

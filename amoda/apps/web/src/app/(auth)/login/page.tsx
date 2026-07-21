@@ -2,21 +2,28 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { z } from "zod";
 import { loginSchema, type LoginInput } from "@amoda/shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { loginRequest } from "@/lib/api/auth";
+import { loginRequest, verifyTwoFactorLoginRequest } from "@/lib/api/auth";
 import { useAuthStore } from "@/store/auth-store";
 import { isAxiosError } from "axios";
+
+const twoFactorSchema = z.object({ token: z.string().length(6, "Enter the 6-digit code") });
+type TwoFactorInput = z.infer<typeof twoFactorSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
   const setSession = useAuthStore((state) => state.setSession);
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -26,10 +33,55 @@ export default function LoginPage() {
   const mutation = useMutation({
     mutationFn: loginRequest,
     onSuccess: (data) => {
+      if ("twoFactorRequired" in data) {
+        setPendingEmail(data.email);
+        return;
+      }
       setSession(data);
       router.push("/dashboard");
     },
   });
+
+  const {
+    register: registerTwoFactor,
+    handleSubmit: handleTwoFactorSubmit,
+    formState: { errors: twoFactorErrors },
+  } = useForm<TwoFactorInput>({ resolver: zodResolver(twoFactorSchema) });
+
+  const twoFactorMutation = useMutation({
+    mutationFn: (values: TwoFactorInput) =>
+      verifyTwoFactorLoginRequest({ email: pendingEmail!, token: values.token }),
+    onSuccess: (data) => {
+      setSession(data);
+      router.push("/dashboard");
+    },
+  });
+
+  if (pendingEmail) {
+    return (
+      <div className="container-page flex min-h-[70vh] items-center justify-center py-16">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Two-factor authentication</CardTitle>
+            <CardDescription>Enter the 6-digit code from your authenticator app.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleTwoFactorSubmit((values) => twoFactorMutation.mutate(values))} className="space-y-4">
+              <div>
+                <Label htmlFor="token">Authentication code</Label>
+                <Input id="token" inputMode="numeric" maxLength={6} className="mt-1" {...registerTwoFactor("token")} />
+                {twoFactorErrors.token && <p className="mt-1 text-xs text-destructive">{twoFactorErrors.token.message}</p>}
+              </div>
+              {twoFactorMutation.isError && <p className="text-sm text-destructive">Invalid authentication code.</p>}
+              <Button type="submit" className="w-full" disabled={twoFactorMutation.isPending}>
+                {twoFactorMutation.isPending ? "Verifying..." : "Verify"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="container-page flex min-h-[70vh] items-center justify-center py-16">

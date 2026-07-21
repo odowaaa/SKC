@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Home, Menu, Search, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { NotificationsBell } from "@/components/layout/notifications-bell";
 import { useAuthStore } from "@/store/auth-store";
 
 const NAV_LINKS = [
@@ -50,12 +51,15 @@ export function Header() {
             </Button>
           </Link>
           {user ? (
-            <Link href="/dashboard">
-              <Button variant="outline" size="sm" className="gap-2">
-                <User className="h-4 w-4" />
-                {user.firstName}
-              </Button>
-            </Link>
+            <>
+              <NotificationsBell />
+              <Link href="/dashboard">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <User className="h-4 w-4" />
+                  {user.firstName}
+                </Button>
+              </Link>
+            </>
           ) : (
             <>
               <Link href="/login">

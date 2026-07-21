@@ -25,6 +25,9 @@ import { AgentsModule } from './modules/agents/agents.module';
 import { ContactModule } from './modules/contact/contact.module';
 import { LeadsModule } from './modules/leads/leads.module';
 import { LeasesModule } from './modules/leases/leases.module';
+import { CompareModule } from './modules/compare/compare.module';
+import { SavedSearchesModule } from './modules/saved-searches/saved-searches.module';
+import { OffersModule } from './modules/offers/offers.module';
 
 @Module({
   imports: [
@@ -53,6 +56,9 @@ import { LeasesModule } from './modules/leases/leases.module';
     ContactModule,
     LeadsModule,
     LeasesModule,
+    CompareModule,
+    SavedSearchesModule,
+    OffersModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

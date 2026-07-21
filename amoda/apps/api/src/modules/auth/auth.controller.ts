@@ -20,6 +20,10 @@ import { LoginDto } from './dto/login.dto';
 import { VerifyOtpDto, ResendOtpDto } from './dto/verify-otp.dto';
 import { ForgotPasswordDto, ResetPasswordDto } from './dto/password-reset.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import {
+  TwoFactorTokenDto,
+  VerifyTwoFactorLoginDto,
+} from './dto/two-factor.dto';
 import { AuthProvider } from '@prisma/client';
 import { UsersService } from '../users/users.service';
 
@@ -58,6 +62,43 @@ export class AuthController {
   @Post('login')
   login(@Body() dto: LoginDto, @Req() req: Request) {
     return this.authService.login(dto, requestMeta(req));
+  }
+
+  @Public()
+  @Post('2fa/verify-login')
+  verifyTwoFactorLogin(
+    @Body() dto: VerifyTwoFactorLoginDto,
+    @Req() req: Request,
+  ) {
+    return this.authService.verifyTwoFactorLogin(
+      dto.email,
+      dto.token,
+      requestMeta(req),
+    );
+  }
+
+  @ApiBearerAuth()
+  @Post('2fa/setup')
+  setupTwoFactor(@CurrentUser() user: AuthenticatedUser) {
+    return this.authService.setupTwoFactor(user.id);
+  }
+
+  @ApiBearerAuth()
+  @Post('2fa/enable')
+  enableTwoFactor(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: TwoFactorTokenDto,
+  ) {
+    return this.authService.enableTwoFactor(user.id, dto.token);
+  }
+
+  @ApiBearerAuth()
+  @Post('2fa/disable')
+  disableTwoFactor(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: TwoFactorTokenDto,
+  ) {
+    return this.authService.disableTwoFactor(user.id, dto.token);
   }
 
   @Public()

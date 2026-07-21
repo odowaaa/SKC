@@ -4,9 +4,11 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import {
+  Bookmark,
   Building2,
   Calendar,
   FileText,
+  HandCoins,
   Heart,
   LayoutDashboard,
   LogOut,
@@ -21,6 +23,7 @@ import { cn } from "@/lib/utils";
 const LISTING_ROLES = ["AGENT", "OWNER", "DEVELOPER", "SUPER_ADMIN", "ADMIN", "REGIONAL_MANAGER", "BRANCH_MANAGER", "PROPERTY_MANAGER"];
 const LEAD_ROLES = ["AGENT", "SUPER_ADMIN", "ADMIN", "REGIONAL_MANAGER", "BRANCH_MANAGER", "MARKETING_MANAGER"];
 const LEASE_ROLES = ["OWNER", "TENANT", "SUPER_ADMIN", "ADMIN", "PROPERTY_MANAGER", "ACCOUNTANT"];
+const OFFER_ROLES = ["AGENT", "SUPER_ADMIN", "ADMIN", "BRANCH_MANAGER", "ACCOUNTANT"];
 const APPOINTMENT_ROLES = ["AGENT"];
 const ADMIN_ROLES = ["SUPER_ADMIN", "ADMIN"];
 const CONTENT_ROLES = ["SUPER_ADMIN", "ADMIN", "MARKETING_MANAGER"];
@@ -34,6 +37,9 @@ function navItemsFor(role: string) {
   if (LEAD_ROLES.includes(role)) {
     items.push({ href: "/dashboard/leads", label: "Leads", icon: Users });
   }
+  if (OFFER_ROLES.includes(role)) {
+    items.push({ href: "/dashboard/offers", label: "Offers", icon: HandCoins });
+  }
   if (APPOINTMENT_ROLES.includes(role)) {
     items.push({ href: "/dashboard/appointments", label: "Appointments", icon: Calendar });
   }
@@ -42,7 +48,9 @@ function navItemsFor(role: string) {
   }
 
   items.push({ href: "/dashboard/favorites", label: "Favorites", icon: Heart });
+  items.push({ href: "/dashboard/saved-searches", label: "Saved Searches", icon: Bookmark });
   items.push({ href: "/dashboard/bookings", label: "My Viewings", icon: Calendar });
+  items.push({ href: "/dashboard/security", label: "Security", icon: Shield });
 
   if (ADMIN_ROLES.includes(role)) {
     items.push({ href: "/dashboard/admin/users", label: "Users", icon: Shield });

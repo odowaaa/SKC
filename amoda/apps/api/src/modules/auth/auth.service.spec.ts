@@ -7,6 +7,17 @@ import * as argon2 from 'argon2';
 import { PrismaService } from '../../prisma/prisma.service';
 import { MailService } from '../notifications/mail.service';
 import { AuthService } from './auth.service';
+import { TwoFactorService } from './two-factor.service';
+
+// otplib ships ESM-only crypto deps that Jest's CJS transform can't parse;
+// the real implementation isn't under test here, so stub the module entirely.
+jest.mock('./two-factor.service', () => ({
+  TwoFactorService: jest.fn().mockImplementation(() => ({
+    generateSecret: jest.fn(),
+    toDataUrl: jest.fn(),
+    verify: jest.fn(),
+  })),
+}));
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -31,6 +42,12 @@ describe('AuthService', () => {
     sendPasswordResetEmail: jest.fn(),
   };
 
+  const twoFactorMock = {
+    generateSecret: jest.fn(),
+    toDataUrl: jest.fn(),
+    verify: jest.fn(),
+  };
+
   const configValues: Record<string, string> = {
     'jwt.accessSecret': 'test-access-secret',
     'jwt.accessExpiresIn': '15m',
@@ -47,6 +64,7 @@ describe('AuthService', () => {
         AuthService,
         { provide: PrismaService, useValue: prismaMock },
         { provide: MailService, useValue: mailMock },
+        { provide: TwoFactorService, useValue: twoFactorMock },
         JwtService,
         { provide: ConfigService, useValue: configMock },
       ],
@@ -120,6 +138,73 @@ describe('AuthService', () => {
 
       const result = await service.login(
         { email: 'user@amoda.app', password: 'StrongPass1' },
+        {},
+      );
+
+      if (!('accessToken' in result))
+        throw new Error('expected tokens, got 2FA challenge');
+      expect(result.accessToken).toBeDefined();
+      expect(result.refreshToken).toBeDefined();
+    });
+
+    it('requires two-factor verification instead of issuing tokens when enabled', async () => {
+      const passwordHash = await argon2.hash('StrongPass1');
+      prismaMock.user.findUnique.mockResolvedValue({
+        id: 'user_2',
+        email: '2fa@amoda.app',
+        passwordHash,
+        isActive: true,
+        isSuspended: false,
+        isTwoFactorOn: true,
+        role: Role.CUSTOMER,
+      });
+
+      const result = await service.login(
+        { email: '2fa@amoda.app', password: 'StrongPass1' },
+        {},
+      );
+
+      expect(result).toEqual({
+        twoFactorRequired: true,
+        email: '2fa@amoda.app',
+      });
+    });
+  });
+
+  describe('verifyTwoFactorLogin', () => {
+    it('rejects an invalid authentication code', async () => {
+      prismaMock.user.findUnique.mockResolvedValue({
+        id: 'user_2',
+        email: '2fa@amoda.app',
+        isTwoFactorOn: true,
+        twoFactorSecret: 'SECRET',
+      });
+      twoFactorMock.verify.mockResolvedValue(false);
+      prismaMock.loginEvent.create.mockResolvedValue({});
+
+      await expect(
+        service.verifyTwoFactorLogin('2fa@amoda.app', '000000', {}),
+      ).rejects.toBeInstanceOf(UnauthorizedException);
+    });
+
+    it('issues tokens for a valid authentication code', async () => {
+      prismaMock.user.findUnique.mockResolvedValue({
+        id: 'user_2',
+        email: '2fa@amoda.app',
+        isActive: true,
+        isSuspended: false,
+        isTwoFactorOn: true,
+        twoFactorSecret: 'SECRET',
+        role: Role.CUSTOMER,
+      });
+      twoFactorMock.verify.mockResolvedValue(true);
+      prismaMock.user.update.mockResolvedValue({});
+      prismaMock.refreshToken.create.mockResolvedValue({});
+      prismaMock.loginEvent.create.mockResolvedValue({});
+
+      const result = await service.verifyTwoFactorLogin(
+        '2fa@amoda.app',
+        '123456',
         {},
       );
 

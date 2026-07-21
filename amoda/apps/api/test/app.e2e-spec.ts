@@ -118,7 +118,11 @@ describe('AMODA API (e2e)', () => {
 
     await request(app.getHttpServer())
       .post(`/api/v1/properties/${property.id}/leads`)
-      .send({ fullName: 'E2E Lead', email: `lead-${Date.now()}@amoda.app`, message: 'Interested!' })
+      .send({
+        fullName: 'E2E Lead',
+        email: `lead-${Date.now()}@amoda.app`,
+        message: 'Interested!',
+      })
       .expect(201)
       .expect(({ body }) => {
         expect(body.data.received).toBe(true);

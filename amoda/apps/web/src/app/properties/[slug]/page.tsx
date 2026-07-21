@@ -6,7 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { PropertyCard } from "@/components/properties/property-card";
 import { FavoriteButton } from "@/components/properties/favorite-button";
+import { CompareButton } from "@/components/properties/compare-button";
 import { BookingForm } from "@/components/properties/booking-form";
+import { RequestInfoForm } from "@/components/properties/request-info-form";
+import { MakeOfferForm } from "@/components/properties/make-offer-form";
+import { MortgageCalculator } from "@/components/mortgage/mortgage-calculator";
 import { getPropertyBySlug, getSimilarProperties } from "@/lib/api/properties";
 import { formatPrice } from "@/lib/utils";
 
@@ -84,7 +88,10 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 {[property.neighborhood, property.district, property.city, property.country].filter(Boolean).join(", ")}
               </p>
             </div>
-            <FavoriteButton propertyId={property.id} />
+            <div className="flex shrink-0 gap-2">
+              <CompareButton propertyId={property.id} />
+              <FavoriteButton propertyId={property.id} />
+            </div>
           </div>
 
           <div className="mt-4 flex flex-wrap gap-6 border-y border-border py-4 text-sm">
@@ -125,6 +132,15 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               ))}
             </div>
           </div>
+
+          {property.listingType === "SALE" && (
+            <div className="mt-12">
+              <h2 className="text-xl font-semibold">Estimate your mortgage</h2>
+              <div className="mt-4">
+                <MortgageCalculator initialPrice={Number(property.price)} currency={property.currency} />
+              </div>
+            </div>
+          )}
 
           {similar.length > 0 && (
             <div className="mt-12">
@@ -169,6 +185,22 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               <BookingForm propertyId={property.id} />
             </CardContent>
           </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <h3 className="mb-3 font-semibold">Request information</h3>
+              <RequestInfoForm propertyId={property.id} />
+            </CardContent>
+          </Card>
+
+          {property.listingType === "SALE" && (
+            <Card>
+              <CardContent className="pt-6">
+                <h3 className="mb-3 font-semibold">Make an offer</h3>
+                <MakeOfferForm propertyId={property.id} currency={property.currency} />
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </div>

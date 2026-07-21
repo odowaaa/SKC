@@ -74,9 +74,21 @@ amoda/
   invoice generation, lease termination, and tenant maintenance requests with status tracking.
 - **Role-based dashboards** (`/dashboard`): a single dashboard shell whose navigation and data adapt to
   the signed-in role — admins get property moderation (approve/reject/feature), user management, and
-  blog publishing; agents get their listings, assigned leads, and appointment management; owners get
-  their listings and lease/invoice tools; everyone gets favorites and booking history. A shared
-  create/edit property form (with Cloudinary image upload) is used across all listing-capable roles.
+  blog publishing; agents get their listings, assigned leads, offers, and appointment management; owners
+  get their listings and lease/invoice tools; everyone gets favorites, saved searches, and booking
+  history. A shared create/edit property form (with Cloudinary image upload) is used across all
+  listing-capable roles.
+- **Sales management (offers)**: buyers submit offers on a for-sale listing (no account required);
+  agents/staff accept, reject, or mark countered — accepting an offer moves the property to
+  `UNDER_OFFER` and auto-generates an agent commission record from their configured commission rate.
+- **Compare properties & saved searches**: side-by-side spec comparison for up to 4 listings, and
+  named saved searches that re-run a filter set from the dashboard.
+- **Two-factor authentication (TOTP)**: QR-code enrollment compatible with Google Authenticator/Authy,
+  a login-time challenge when enabled, and an enable/disable flow gated by a valid code.
+- **Mortgage calculator**: amortization-based monthly payment estimate, standalone at
+  `/mortgage-calculator` and embedded on for-sale property pages.
+- **In-app notifications**: a header bell backed by the existing notifications API, with unread counts
+  and mark-as-read.
 - **DX**: Swagger docs at `/api/docs`, seed script with demo accounts and sample listings, unit + e2e
   tests, Dockerfiles for both apps, docker-compose for local full-stack + Postgres + Redis, CI workflow.
 
@@ -168,8 +180,8 @@ This MVP intentionally scopes down the full AMODA specification to a real, worki
 - Lease documents/e-signing, automated rent-collection reminders, tenant-facing lease portal beyond the
   dashboard list (lease creation, invoicing, and maintenance requests are built)
 - CRM pipeline board view and call/email logging (lead list, notes, tasks, and status pipeline exist)
-- 2FA, device/session management UI, Apple & Facebook OAuth (schema + config wired, need app credentials)
+- Device/session management UI, Apple & Facebook OAuth (schema + config wired, need app credentials)
 - AI features (description generation, price estimation, chat assistant, recommendations)
 - Map-based polygon search, virtual tours/360° viewer, floor plan uploads UI
 - Redis-backed caching and rate-limit store (currently in-memory throttling)
-- Commission tracking UI and sales/offers workflow (schema exists: `Offer`, `Commission`)
+- Saved-search alert emails (the model and UI exist; no background job triggers them yet)

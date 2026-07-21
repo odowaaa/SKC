@@ -18,9 +18,31 @@ export async function registerRequest(payload: {
   return data.data as { user: AuthUser };
 }
 
+export type LoginResult = AuthSession | { twoFactorRequired: true; email: string };
+
 export async function loginRequest(payload: { email: string; password: string }) {
   const { data } = await apiClient.post("/auth/login", payload);
+  return data.data as LoginResult;
+}
+
+export async function verifyTwoFactorLoginRequest(payload: { email: string; token: string }) {
+  const { data } = await apiClient.post("/auth/2fa/verify-login", payload);
   return data.data as AuthSession;
+}
+
+export async function setupTwoFactorRequest() {
+  const { data } = await apiClient.post("/auth/2fa/setup");
+  return data.data as { secret: string; qrCodeDataUrl: string };
+}
+
+export async function enableTwoFactorRequest(token: string) {
+  const { data } = await apiClient.post("/auth/2fa/enable", { token });
+  return data.data as { enabled: boolean };
+}
+
+export async function disableTwoFactorRequest(token: string) {
+  const { data } = await apiClient.post("/auth/2fa/disable", { token });
+  return data.data as { disabled: boolean };
 }
 
 export async function verifyOtpRequest(payload: { email: string; code: string }) {

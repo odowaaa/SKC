@@ -13,6 +13,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { MailService } from '../notifications/mail.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { TwoFactorService } from './two-factor.service';
 
 export interface TokenPair {
   accessToken: string;
@@ -36,6 +37,7 @@ export class AuthService {
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
     private readonly mail: MailService,
+    private readonly twoFactor: TwoFactorService,
   ) {}
 
   private sanitize(user: User) {
@@ -153,6 +155,10 @@ export class AuthService {
       throw new UnauthorizedException('Account is inactive or suspended');
     }
 
+    if (user.isTwoFactorOn) {
+      return { twoFactorRequired: true as const, email: user.email };
+    }
+
     const tokens = await this.issueTokenPair(user, meta);
     await this.prisma.user.update({
       where: { id: user.id },
@@ -161,6 +167,84 @@ export class AuthService {
     await this.recordLoginEvent(user.id, meta, true);
 
     return { user: this.sanitize(user), ...tokens };
+  }
+
+  async verifyTwoFactorLogin(
+    email: string,
+    token: string,
+    meta: { ipAddress?: string; userAgent?: string },
+  ) {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+
+    if (!user || !user.isTwoFactorOn || !user.twoFactorSecret) {
+      throw new UnauthorizedException(
+        'Two-factor authentication is not enabled for this account',
+      );
+    }
+
+    if (!(await this.twoFactor.verify(token, user.twoFactorSecret))) {
+      await this.recordLoginEvent(user.id, meta, false);
+      throw new UnauthorizedException('Invalid authentication code');
+    }
+
+    const tokens = await this.issueTokenPair(user, meta);
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { lastLoginAt: new Date(), lastLoginIp: meta.ipAddress },
+    });
+    await this.recordLoginEvent(user.id, meta, true);
+
+    return { user: this.sanitize(user), ...tokens };
+  }
+
+  async setupTwoFactor(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new BadRequestException('User not found');
+
+    const { secret, otpauthUrl } = this.twoFactor.generateSecret(user.email);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { twoFactorSecret: secret },
+    });
+
+    const qrCodeDataUrl = await this.twoFactor.toDataUrl(otpauthUrl);
+    return { secret, qrCodeDataUrl };
+  }
+
+  async enableTwoFactor(userId: string, token: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user || !user.twoFactorSecret) {
+      throw new BadRequestException(
+        'Call the setup endpoint before enabling two-factor authentication',
+      );
+    }
+
+    if (!(await this.twoFactor.verify(token, user.twoFactorSecret))) {
+      throw new BadRequestException('Invalid authentication code');
+    }
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { isTwoFactorOn: true },
+    });
+    return { enabled: true };
+  }
+
+  async disableTwoFactor(userId: string, token: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user || !user.isTwoFactorOn || !user.twoFactorSecret) {
+      throw new BadRequestException('Two-factor authentication is not enabled');
+    }
+
+    if (!(await this.twoFactor.verify(token, user.twoFactorSecret))) {
+      throw new BadRequestException('Invalid authentication code');
+    }
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { isTwoFactorOn: false, twoFactorSecret: null },
+    });
+    return { disabled: true };
   }
 
   async loginOrRegisterWithOAuth(
