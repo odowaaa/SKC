@@ -219,7 +219,9 @@
     <section class="section pb-8">
       <div class="container-page" data-reveal>
         <article class="grid overflow-hidden rounded-3xl bg-primary-950 shadow-soft lg:grid-cols-2">
-          <div class="h-56 bg-gradient-to-br from-primary-700 to-primary-900 lg:h-full"></div>
+          <div class="flex h-56 items-center justify-center bg-gradient-to-br from-primary-700 to-primary-900 lg:h-full">
+            <svg class="h-20 w-20 text-white/90" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
           <div class="p-8 md:p-10">
             <span class="badge bg-primary-800 text-gold-300">Admissions &middot; Featured</span>
             <h2 class="mt-4 text-2xl md:text-3xl font-bold text-white">2026 Founding Enrollment Now Open</h2>
@@ -251,6 +253,13 @@
       function escapeHtml(str) {
         return String(str ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
       }
+      const NEWS_ICONS = {
+        admissions: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />',
+        curriculum: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />',
+        partnerships: '<path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />',
+        announcements: '<path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46" />',
+      };
+      const DEFAULT_NEWS_ICON = NEWS_ICONS.announcements;
       (async () => {
         const container = document.getElementById('news-grid-items');
         try {
@@ -260,15 +269,20 @@
             container.innerHTML = '<p class="col-span-full text-center text-sm text-slate-500 dark:text-slate-400">No news posts yet. Check back soon.</p>';
             return;
           }
-          container.innerHTML = items.map((post) => `
+          container.innerHTML = items.map((post) => {
+            const icon = NEWS_ICONS[post.category.toLowerCase()] || DEFAULT_NEWS_ICON;
+            return `
             <article data-filter-tags="${escapeHtml(post.category.toLowerCase())}" class="card overflow-hidden">
-              <div class="h-40 bg-gradient-to-br ${escapeHtml(post.gradient)}"></div>
+              <div class="flex h-40 items-center justify-center bg-gradient-to-br ${escapeHtml(post.gradient)}">
+                <svg class="h-12 w-12 text-white/90" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">${icon}</svg>
+              </div>
               <div class="p-6">
                 <span class="badge">${escapeHtml(post.category)}</span>
                 <h3 class="mt-3 font-bold text-primary-900 dark:text-white">${escapeHtml(post.title)}</h3>
                 <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">${escapeHtml(post.excerpt || '')}</p>
               </div>
-            </article>`).join('');
+            </article>`;
+          }).join('');
         } catch {
           container.innerHTML = '<p class="col-span-full text-center text-sm text-red-600">Unable to load news right now. Please try again later.</p>';
         }
