@@ -732,7 +732,9 @@
       const { items } = await api('/api/admin/news');
       document.getElementById('news-list').innerHTML = items.map((n) => `
         <div class="card p-5">
-          <div class="h-3 w-full rounded bg-gradient-to-r ${n.gradient}"></div>
+          ${n.media_id
+            ? `<img src="/api/media/${n.media_id}" alt="${escapeAttr(n.title)}" class="aspect-video w-full rounded-lg object-cover">`
+            : `<div class="h-3 w-full rounded bg-gradient-to-r ${n.gradient}"></div>`}
           <span class="badge mt-3">${escapeHtml(n.category)} · ${n.status}</span>
           <h3 class="mt-2 font-bold text-primary-900 dark:text-white">${escapeHtml(n.title)}</h3>
           <p class="mt-1 text-xs text-slate-500 line-clamp-2">${escapeHtml(n.excerpt || '')}</p>
@@ -947,11 +949,15 @@
           <div><label class="form-label">Category</label><input name="category" required class="form-input" value="${escapeAttr(item?.category)}"></div>
           <div><label class="form-label">Excerpt</label><textarea name="excerpt" rows="2" class="form-input">${escapeHtml(item?.excerpt || '')}</textarea></div>
           <div><label class="form-label">Body</label><textarea name="body" rows="4" class="form-input">${escapeHtml(item?.body || '')}</textarea></div>
-          <div><label class="form-label">Gradient</label><select name="gradient" class="form-input">${gradientOptions(item?.gradient)}</select></div>
+          <div><label class="form-label">Photo (optional — leave blank to keep the gradient placeholder)</label><input type="file" name="photo" accept="image/png,image/jpeg,image/webp,image/gif" class="form-input">
+            ${item?.media_id ? `<img src="/api/media/${item.media_id}" class="mt-2 h-20 rounded-lg object-cover">` : ''}
+          </div>
+          <div><label class="form-label">Gradient (used if no photo is uploaded)</label><select name="gradient" class="form-input">${gradientOptions(item?.gradient)}</select></div>
           <div><label class="form-label">Status</label><select name="status" class="form-input">
             <option value="draft" ${item?.status === 'draft' ? 'selected' : ''}>draft</option>
             <option value="published" ${item?.status === 'published' ? 'selected' : ''}>published</option>
           </select></div>
+          <input type="hidden" name="media_id" value="${item?.media_id ?? ''}">
           <div class="flex gap-2 pt-2"><button type="submit" class="btn-primary">Save</button><button type="button" data-cancel class="btn-ghost">Cancel</button></div>`;
       } else if (type === 'programs') {
         const schools = allDepartments.length ? allDepartments.map((d) => d.key) : ['english', 'it', 'engineering', 'social-services', 'health'];
@@ -1005,10 +1011,10 @@
         const payload = Object.fromEntries(new FormData(modalForm).entries());
         if (type === 'staff' && isEdit) payload.active = modalForm.querySelector('[name="active"]').checked;
         try {
-          if (type === 'gallery') {
+          if (type === 'gallery' || type === 'news') {
             const fileInput = modalForm.querySelector('[name="photo"]');
             if (fileInput.files[0]) {
-              const uploaded = await uploadMedia(fileInput.files[0], 'gallery');
+              const uploaded = await uploadMedia(fileInput.files[0], type);
               payload.media_id = uploaded.id;
             }
             delete payload.photo;

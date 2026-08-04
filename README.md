@@ -79,6 +79,7 @@ Uploads (gallery photos, student ID photos, general files) go to a Cloudflare **
 | `0004_phase2_sis.sql` | `student_number`, `courses`, `enrollments`, `attendance`, `grades` |
 | `0005_phase3_media.sql` | `media_files`, gallery/student photo linkage |
 | `0006_phase4_settings.sql` | `site_settings` (seeded with current contact info) |
+| `0007_news_media.sql` | `news_posts.media_id` (real uploaded photo, falls back to gradient) |
 
 Seeded staff/admin account — **change this password immediately after first deploy** (Staff Dashboard → Account tab):
 - Email: `admin@somalikingcollege.edu.so`
@@ -134,6 +135,7 @@ npx wrangler d1 execute skc_db --local --file=migrations/0003_phase1_rbac.sql
 npx wrangler d1 execute skc_db --local --file=migrations/0004_phase2_sis.sql
 npx wrangler d1 execute skc_db --local --file=migrations/0005_phase3_media.sql
 npx wrangler d1 execute skc_db --local --file=migrations/0006_phase4_settings.sql
+npx wrangler d1 execute skc_db --local --file=migrations/0007_news_media.sql
 
 npm run dev           # same as: npx wrangler dev --local
 ```
@@ -152,8 +154,9 @@ Then open `http://localhost:8787`. R2 is simulated locally by Wrangler automatic
    npx wrangler d1 execute skc_db --remote --file=migrations/0004_phase2_sis.sql
    npx wrangler d1 execute skc_db --remote --file=migrations/0005_phase3_media.sql
    npx wrangler d1 execute skc_db --remote --file=migrations/0006_phase4_settings.sql
+   npx wrangler d1 execute skc_db --remote --file=migrations/0007_news_media.sql
    ```
-   (If your database already has `0001`/`0002` applied from an earlier deploy, just run `0003` through `0006`.)
+   (If your database already has earlier migrations applied from a previous deploy, just run whichever numbered files are new.)
 4. Deploy: `npx wrangler deploy`
 5. If you haven't already, register a `workers.dev` subdomain (Wrangler will prompt on first deploy) and/or attach your custom domain in the Cloudflare dashboard under the Worker's **Domains** tab — `wrangler.jsonc` already declares `skc.college` and `www.skc.college` as custom domain routes, provided that domain's zone has no conflicting DNS records at the root/`www` hostnames.
 

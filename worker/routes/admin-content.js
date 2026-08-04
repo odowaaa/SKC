@@ -50,10 +50,10 @@ export async function handleAdminContentRoute(request, env, pathname, method, st
     const publishedAt = body.status === 'published' ? new Date().toISOString() : null;
     const result = await run(
       env.DB,
-      `INSERT INTO news_posts (title, category, excerpt, body, gradient, status, published_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO news_posts (title, category, excerpt, body, gradient, status, published_at, media_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       body.title, body.category, body.excerpt || null, body.body || null,
-      body.gradient || 'from-primary-700 to-primary-900', body.status || 'draft', publishedAt
+      body.gradient || 'from-primary-700 to-primary-900', body.status || 'draft', publishedAt, body.media_id || null
     );
     await logAudit(env.DB, staffUser, 'create', 'news_post', result.meta.last_row_id, { title: body.title });
     return json({ id: result.meta.last_row_id }, 201);
@@ -67,9 +67,9 @@ export async function handleAdminContentRoute(request, env, pathname, method, st
     const publishedAt = body.status === 'published' ? (body.published_at || new Date().toISOString()) : null;
     await run(
       env.DB,
-      `UPDATE news_posts SET title = ?, category = ?, excerpt = ?, body = ?, gradient = ?, status = ?, published_at = ? WHERE id = ?`,
+      `UPDATE news_posts SET title = ?, category = ?, excerpt = ?, body = ?, gradient = ?, status = ?, published_at = ?, media_id = ? WHERE id = ?`,
       body.title, body.category, body.excerpt || null, body.body || null,
-      body.gradient || 'from-primary-700 to-primary-900', body.status || 'draft', publishedAt, newsMatch[1]
+      body.gradient || 'from-primary-700 to-primary-900', body.status || 'draft', publishedAt, body.media_id || null, newsMatch[1]
     );
     await logAudit(env.DB, staffUser, 'update', 'news_post', newsMatch[1], { title: body.title });
     return json({ message: 'Updated.' });

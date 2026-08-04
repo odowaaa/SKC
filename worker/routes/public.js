@@ -242,10 +242,10 @@ export async function handlePublicRoute(request, env, pathname, method) {
   if (pathname === '/api/news' && method === 'GET') {
     const rows = await all(
       env.DB,
-      `SELECT id, title, category, excerpt, body, gradient, published_at
+      `SELECT id, title, category, excerpt, body, gradient, media_id, published_at
        FROM news_posts WHERE status = 'published' ORDER BY published_at DESC`
     );
-    return json({ items: rows });
+    return json({ items: rows.map((r) => ({ ...r, image_url: r.media_id ? `/api/media/${r.media_id}` : null })) });
   }
 
   if (pathname === '/api/programs' && method === 'GET') {
