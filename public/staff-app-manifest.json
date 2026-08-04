@@ -1,0 +1,18 @@
+{
+  "id": "/staff-dashboard.html",
+  "name": "SKC Staff Admin",
+  "short_name": "SKC Admin",
+  "description": "SomaliKing College staff administration dashboard.",
+  "start_url": "/staff-dashboard.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b1c3a",
+  "theme_color": "#0b1c3a",
+  "orientation": "any",
+  "icons": [
+    { "src": "images/app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "images/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "images/app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "images/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

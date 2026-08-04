@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | SomaliKing College</title>
+  <meta name="description" content="Your SomaliKing College student dashboard.">
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://www.somalikingcollege.edu.so/student-dashboard.html">
+
+  <!-- Icons -->
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <link rel="apple-touch-icon" href="images/favicon.svg">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#0b1c3a">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/tailwind.css">
+</head>
+<body class="bg-white dark:bg-primary-950">
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Main header (simplified — no public nav on a signed-in dashboard) -->
+  <header id="site-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100 transition-shadow dark:bg-primary-950/95 dark:border-primary-900">
+    <div class="container-page flex items-center justify-between py-3">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <img src="images/favicon.svg" alt="SomaliKing College crest" class="h-11 w-11" width="44" height="44">
+        <span class="leading-tight">
+          <span class="block font-display font-bold text-lg text-primary-900 dark:text-white">SomaliKing College</span>
+          <span class="block text-[11px] tracking-widest uppercase text-gold-600 dark:text-gold-400">Student Dashboard</span>
+        </span>
+      </a>
+      <div class="flex items-center gap-3">
+        <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="rounded-full p-2 text-primary-700 hover:bg-primary-50 dark:text-gold-300 dark:hover:bg-primary-900">
+          <svg data-theme-icon="light" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>
+          <svg data-theme-icon="dark" class="hidden h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 008.997-5.998z" /></svg>
+        </button>
+        <button type="button" id="logout-btn" class="btn-ghost">Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div id="auth-gate" class="section text-center hidden">
+      <div class="container-page">
+        <p class="text-lg text-slate-600 dark:text-slate-400">You need to sign in to view this page.</p>
+        <a href="student-portal.html" class="btn-primary mt-6 inline-flex">Go to Student Portal</a>
+      </div>
+    </div>
+
+    <div id="dashboard-content" class="hidden">
+      <section class="relative overflow-hidden bg-primary-900 bg-hero-pattern">
+        <div class="absolute inset-0 opacity-[0.07]" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:22px 22px;"></div>
+        <div class="container-page relative py-14">
+          <p class="eyebrow text-gold-300">Welcome back</p>
+          <h1 id="welcome-name" class="mt-2 text-3xl md:text-4xl font-display font-extrabold text-white">Student</h1>
+          <p id="welcome-email" class="mt-2 text-primary-200"></p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container-page grid gap-8 lg:grid-cols-3">
+          <div class="lg:col-span-2 space-y-6">
+            <div class="card p-6">
+              <h2 class="text-lg font-bold text-primary-900 dark:text-white">Your Profile</h2>
+              <dl class="mt-4 grid gap-4 sm:grid-cols-2 text-sm">
+                <div><dt class="text-slate-500 dark:text-slate-400">School</dt><dd id="profile-school" class="font-semibold text-primary-900 dark:text-white">—</dd></div>
+                <div><dt class="text-slate-500 dark:text-slate-400">Schedule</dt><dd id="profile-schedule" class="font-semibold text-primary-900 dark:text-white">—</dd></div>
+                <div><dt class="text-slate-500 dark:text-slate-400">Phone</dt><dd id="profile-phone" class="font-semibold text-primary-900 dark:text-white">—</dd></div>
+                <div><dt class="text-slate-500 dark:text-slate-400">Member Since</dt><dd id="profile-since" class="font-semibold text-primary-900 dark:text-white">—</dd></div>
+              </dl>
+            </div>
+
+            <div class="card p-6">
+              <h2 class="text-lg font-bold text-primary-900 dark:text-white">Admission &amp; Enrollment Status</h2>
+              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Tracks any admissions application submitted with this email address.</p>
+              <div id="applications-list" class="mt-4 space-y-3">
+                <p class="text-sm text-slate-500 dark:text-slate-400">Loading&hellip;</p>
+              </div>
+            </div>
+
+            <div id="courses-card" class="card p-6 hidden">
+              <h2 class="text-lg font-bold text-primary-900 dark:text-white">My Courses &amp; Grades</h2>
+              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Your active program enrollment, courses, and recorded grades.</p>
+              <div id="courses-list" class="mt-4 space-y-4"></div>
+            </div>
+
+            <div class="card p-6">
+              <h2 class="text-lg font-bold text-primary-900 dark:text-white">Change Password</h2>
+              <form id="password-form" class="mt-4 grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label for="current-password" class="form-label">Current Password</label>
+                  <input id="current-password" name="current_password" type="password" required class="form-input">
+                </div>
+                <div>
+                  <label for="new-password" class="form-label">New Password</label>
+                  <input id="new-password" name="new_password" type="password" required minlength="8" class="form-input">
+                </div>
+                <div class="sm:col-span-2">
+                  <button type="submit" class="btn-secondary">Update Password</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <div class="rounded-2xl bg-gold-50 p-5 text-sm text-primary-900 dark:bg-primary-900 dark:text-gold-200">
+              Need help? Contact the <a href="contact.html" class="font-semibold underline">Student Support Officer</a> or your Head of School.
+            </div>
+            <div class="card p-6">
+              <h2 class="text-lg font-bold text-primary-900 dark:text-white">Quick Links</h2>
+              <ul class="mt-4 space-y-2 text-sm">
+                <li><a href="student-id-card.html" class="text-primary-700 hover:text-gold-600 dark:text-gold-400">View / Print Student ID Card</a></li>
+                <li><a href="programs.html" class="text-primary-700 hover:text-gold-600 dark:text-gold-400">Browse Programs</a></li>
+                <li><a href="news.html" class="text-primary-700 hover:text-gold-600 dark:text-gold-400">Latest News</a></li>
+                <li><a href="index.html" class="text-primary-700 hover:text-gold-600 dark:text-gold-400">Back to Home</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="bg-primary-950 text-primary-200">
+    <div class="container-page flex flex-col items-center justify-between gap-3 py-6 text-xs text-primary-400 sm:flex-row">
+      <p>&copy; <span data-year></span> SomaliKing College (SKC). All rights reserved.</p>
+      <a href="index.html" class="hover:text-gold-300 transition">somalikingcollege.edu.so</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    (async () => {
+      try {
+        const res = await fetch('/api/me', { credentials: 'include' });
+        if (!res.ok) throw new Error('not signed in');
+        const { user } = await res.json();
+        document.getElementById('welcome-name').textContent = user.full_name || 'Student';
+        document.getElementById('welcome-email').textContent = user.email || '';
+        document.getElementById('profile-school').textContent = user.school || 'Not set';
+        document.getElementById('profile-schedule').textContent = user.schedule || 'Not set';
+        document.getElementById('profile-phone').textContent = user.phone || 'Not set';
+        document.getElementById('profile-since').textContent = user.created_at ? new Date(user.created_at).toLocaleDateString() : '—';
+        document.getElementById('dashboard-content').classList.remove('hidden');
+        loadApplications();
+        loadTranscript();
+      } catch {
+        document.getElementById('auth-gate').classList.remove('hidden');
+      }
+    })();
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str ?? '';
+      return div.innerHTML;
+    }
+
+    const STATUS_STYLES = {
+      new: 'bg-slate-100 text-slate-700 dark:bg-primary-800 dark:text-slate-200',
+      reviewed: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
+      accepted: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
+      rejected: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+    };
+    const STATUS_LABELS = {
+      new: 'Submitted — Awaiting Review',
+      reviewed: 'Under Review',
+      accepted: 'Accepted',
+      rejected: 'Not Accepted',
+    };
+
+    async function loadApplications() {
+      const list = document.getElementById('applications-list');
+      try {
+        const res = await fetch('/api/me/applications', { credentials: 'include' });
+        if (!res.ok) throw new Error('failed');
+        const { items } = await res.json();
+        if (!items || items.length === 0) {
+          list.innerHTML = `<p class="text-sm text-slate-500 dark:text-slate-400">No admissions application found for this email yet. <a href="admissions.html" class="font-semibold text-primary-700 underline dark:text-gold-400">Apply now</a>.</p>`;
+          return;
+        }
+        list.innerHTML = items.map((a) => `
+          <div class="rounded-xl border border-slate-100 p-4 dark:border-primary-800">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <p class="font-semibold text-primary-900 dark:text-white">${escapeHtml(a.school)}</p>
+              <span class="rounded-full px-3 py-1 text-xs font-semibold ${STATUS_STYLES[a.status] || STATUS_STYLES.new}">${STATUS_LABELS[a.status] || a.status}</span>
+            </div>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Schedule: ${escapeHtml(a.schedule)} &middot; Submitted ${new Date(a.created_at).toLocaleDateString()}</p>
+          </div>`).join('');
+      } catch {
+        list.innerHTML = `<p class="text-sm text-slate-500 dark:text-slate-400">Could not load application status right now.</p>`;
+      }
+    }
+
+    async function loadTranscript() {
+      try {
+        const res = await fetch('/api/me/transcript', { credentials: 'include' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data.enrollments || data.enrollments.length === 0) return;
+        document.getElementById('courses-card').classList.remove('hidden');
+        document.getElementById('courses-list').innerHTML = data.enrollments.map((e) => `
+          <div>
+            <div class="flex items-center justify-between">
+              <p class="font-semibold text-primary-900 dark:text-white">${escapeHtml(e.program_title)}</p>
+              <span class="rounded-full px-3 py-1 text-xs font-semibold ${e.status === 'active' ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300' : 'bg-slate-100 text-slate-700 dark:bg-primary-800 dark:text-slate-200'}">${escapeHtml(e.status)}</span>
+            </div>
+            <table class="mt-2 w-full text-sm">
+              <tbody>
+                ${e.courses.length ? e.courses.map((c) => `
+                  <tr class="border-b border-slate-50 dark:border-primary-900">
+                    <td class="py-1.5 pr-3">${escapeHtml(c.code)} &middot; ${escapeHtml(c.title)}</td>
+                    <td class="py-1.5 pr-3 text-right">${c.score ?? '—'}</td>
+                    <td class="py-1.5 text-right font-semibold">${escapeHtml(c.grade || '—')}</td>
+                  </tr>`).join('') : `<tr><td class="py-1.5 text-slate-500">No courses recorded yet.</td></tr>`}
+              </tbody>
+            </table>
+          </div>`).join('');
+      } catch {
+        // Silently skip — this card only shows once a student has an active enrollment.
+      }
+    }
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+      window.location.href = 'student-portal.html';
+    });
+
+    document.getElementById('password-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const payload = Object.fromEntries(new FormData(form).entries());
+      const res = await fetch('/api/me/password', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      alert(res.ok ? (data.message || 'Password updated.') : (data.error || 'Something went wrong.'));
+      if (res.ok) form.reset();
+    });
+  </script>
+</body>
+</html>

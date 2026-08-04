@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Dashboard | SomaliKing College</title>
+  <meta name="description" content="Staff dashboard for SomaliKing College.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://www.somalikingcollege.edu.so/staff-dashboard.html">
+
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <link rel="apple-touch-icon" href="images/app-icon-192.png">
+  <link rel="manifest" href="staff-app-manifest.json">
+  <meta name="theme-color" content="#0b1c3a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="SKC Admin">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tailwind.css">
+</head>
+<body class="bg-slate-50 dark:bg-primary-950">
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header id="site-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100 dark:bg-primary-950/95 dark:border-primary-900">
+    <div class="container-page flex items-center justify-between py-3">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <img src="images/favicon.svg" alt="SomaliKing College crest" class="h-11 w-11" width="44" height="44">
+        <span class="leading-tight">
+          <span class="block font-display font-bold text-lg text-primary-900 dark:text-white">SomaliKing College</span>
+          <span class="block text-[11px] tracking-widest uppercase text-gold-600 dark:text-gold-400">Staff Dashboard</span>
+        </span>
+      </a>
+      <div class="flex items-center gap-3">
+        <button type="button" data-theme-toggle aria-label="Toggle dark mode" class="rounded-full p-2 text-primary-700 hover:bg-primary-50 dark:text-gold-300 dark:hover:bg-primary-900">
+          <svg data-theme-icon="light" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>
+          <svg data-theme-icon="dark" class="hidden h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 008.997-5.998z" /></svg>
+        </button>
+        <button type="button" id="install-app-btn" class="btn-secondary hidden">Install App</button>
+        <button type="button" id="logout-btn" class="btn-ghost">Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div id="auth-gate" class="section text-center hidden">
+      <div class="container-page">
+        <p class="text-lg text-slate-600 dark:text-slate-400">You need to sign in with a staff account to view this page.</p>
+        <a href="staff-portal.html" class="btn-primary mt-6 inline-flex">Go to Staff Portal</a>
+      </div>
+    </div>
+
+    <div id="dashboard-content" class="hidden">
+      <div class="container-page py-8">
+        <p class="eyebrow">Welcome back</p>
+        <h1 id="welcome-name" class="mt-1 text-2xl md:text-3xl font-display font-extrabold text-primary-900 dark:text-white">Staff</h1>
+
+        <div class="mt-6 flex flex-wrap gap-2" role="tablist">
+          <button type="button" data-tab="dashboard" data-resource="dashboard" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Dashboard</button>
+          <button type="button" data-tab="applications" data-resource="applications" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Applications</button>
+          <button type="button" data-tab="students" data-resource="students" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Students</button>
+          <button type="button" data-tab="messages" data-resource="messages" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Messages</button>
+          <button type="button" data-tab="news" data-resource="content" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">News</button>
+          <button type="button" data-tab="programs" data-resource="content" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Programs</button>
+          <button type="button" data-tab="gallery" data-resource="content" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Gallery</button>
+          <button type="button" data-tab="departments" data-resource="departments" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Departments</button>
+          <button type="button" data-tab="media" data-resource="media" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Media</button>
+          <button type="button" data-tab="staff" data-resource="staff_management" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Staff</button>
+          <button type="button" data-tab="audit" data-resource="audit_logs" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Audit Log</button>
+          <button type="button" data-tab="settings" data-resource="settings" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Settings</button>
+          <button type="button" data-tab="account" data-resource="account" class="rounded-full border border-slate-200 px-4 py-1.5 text-sm font-medium text-primary-800 dark:border-primary-700 dark:text-white">Account</button>
+        </div>
+
+        <!-- Dashboard -->
+        <section id="tab-dashboard" class="dash-panel mt-6">
+          <div id="stats-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
+        </section>
+
+        <!-- Applications -->
+        <section id="tab-applications" class="dash-panel mt-6 hidden">
+          <div class="card overflow-x-auto p-4">
+            <table class="w-full min-w-[720px] text-sm">
+              <thead>
+                <tr class="border-b border-slate-100 text-left text-slate-500 dark:border-primary-800 dark:text-slate-400">
+                  <th class="py-2 pr-4">Name</th><th class="py-2 pr-4">Email</th><th class="py-2 pr-4">School</th>
+                  <th class="py-2 pr-4">Schedule</th><th class="py-2 pr-4">Date</th><th class="py-2 pr-4">Status</th>
+                </tr>
+              </thead>
+              <tbody id="applications-body"></tbody>
+            </table>
+            <p id="applications-empty" class="hidden py-6 text-center text-sm text-slate-500">No applications yet.</p>
+          </div>
+        </section>
+
+        <!-- Students (SIS) -->
+        <section id="tab-students" class="dash-panel mt-6 hidden">
+          <div class="flex flex-wrap gap-2" role="tablist">
+            <button type="button" data-subtab="directory" class="sis-subtab rounded-full border border-slate-200 px-3 py-1 text-xs font-medium dark:border-primary-700">Directory</button>
+            <button type="button" data-subtab="courses" class="sis-subtab rounded-full border border-slate-200 px-3 py-1 text-xs font-medium dark:border-primary-700">Courses</button>
+            <button type="button" data-subtab="attendance" class="sis-subtab rounded-full border border-slate-200 px-3 py-1 text-xs font-medium dark:border-primary-700">Attendance</button>
+            <button type="button" data-subtab="grades" class="sis-subtab rounded-full border border-slate-200 px-3 py-1 text-xs font-medium dark:border-primary-700">Grades</button>
+          </div>
+
+          <!-- Directory -->
+          <div id="sis-directory" class="sis-subpanel mt-4">
+            <div class="flex gap-2">
+              <input id="student-search" type="text" placeholder="Search by name, email, or student number..." class="form-input max-w-sm">
+            </div>
+            <div class="card mt-4 overflow-x-auto p-4">
+              <table class="w-full min-w-[640px] text-sm">
+                <thead>
+                  <tr class="border-b border-slate-100 text-left text-slate-500 dark:border-primary-800 dark:text-slate-400">
+                    <th class="py-2 pr-4">Student #</th><th class="py-2 pr-4">Name</th><th class="py-2 pr-4">Email</th>
+                    <th class="py-2 pr-4">School</th><th class="py-2 pr-4">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="students-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Student detail panel -->
+          <div id="student-detail" class="card mt-4 hidden p-6"></div>
+
+          <!-- Courses -->
+          <div id="sis-courses" class="sis-subpanel mt-4 hidden">
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="courses-program-select" class="form-input max-w-xs"></select>
+              <button type="button" id="add-course-btn" class="btn-secondary">+ New Course</button>
+            </div>
+            <div class="card mt-4 overflow-x-auto p-4">
+              <table class="w-full min-w-[560px] text-sm">
+                <thead>
+                  <tr class="border-b border-slate-100 text-left text-slate-500 dark:border-primary-800 dark:text-slate-400">
+                    <th class="py-2 pr-4">Code</th><th class="py-2 pr-4">Title</th><th class="py-2 pr-4">Credits</th>
+                    <th class="py-2 pr-4">Term</th><th class="py-2 pr-4">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="courses-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Attendance -->
+          <div id="sis-attendance" class="sis-subpanel mt-4 hidden">
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="attendance-course-select" class="form-input max-w-xs"></select>
+              <input id="attendance-date" type="date" class="form-input max-w-[180px]">
+              <button type="button" id="load-attendance-btn" class="btn-secondary">Load Roster</button>
+            </div>
+            <div class="card mt-4 overflow-x-auto p-4">
+              <table class="w-full min-w-[480px] text-sm">
+                <thead>
+                  <tr class="border-b border-slate-100 text-left text-slate-500 dark:border-primary-800 dark:text-slate-400">
+                    <th class="py-2 pr-4">Student</th><th class="py-2 pr-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="attendance-body"></tbody>
+              </table>
+              <button type="button" id="save-attendance-btn" class="btn-primary mt-4 hidden">Save Attendance</button>
+            </div>
+          </div>
+
+          <!-- Grades -->
+          <div id="sis-grades" class="sis-subpanel mt-4 hidden">
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="grades-course-select" class="form-input max-w-xs"></select>
+              <button type="button" id="load-grades-btn" class="btn-secondary">Load Roster</button>
+            </div>
+            <div class="card mt-4 overflow-x-auto p-4">
+              <table class="w-full min-w-[560px] text-sm">
+                <thead>
+                  <tr class="border-b border-slate-100 text-left text-slate-500 dark:border-primary-800 dark:text-slate-400">
+                    <th class="py-2 pr-4">Student</th><th class="py-2 pr-4">Score</th><th class="py-2 pr-4">Grade</th><th class="py-2 pr-4">Remarks</th>
+                  </tr>
+                </thead>
+                <tbody id="grades-body"></tbody>
+              </table>
+              <button type="button" id="save-grades-btn" class="btn-primary mt-4 hidden">Save Grades</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Messages -->
+        <section id="tab-messages" class="dash-panel mt-6 hidden">
+          <div class="card overflow-x-auto p-4">
+            <table class="w-full min-w-[720px] text-sm">
+              <thead>
+                <tr class="border-b border-slate-100 text-left text-slate-500 dark:border-primary-800 dark:text-slate-400">
+                  <th class="py-2 pr-4">Name</th><th class="py-2 pr-4">Email</th><th class="py-2 pr-4">Subject</th>
+                  <th class="py-2 pr-4">Message</th><th class="py-2 pr-4">Date</th><th class="py-2 pr-4">Status</th>
+                </tr>
+              </thead>
+              <tbody id="messages-body"></tbody>
+            </table>
+            <p id="messages-empty" class="hidden py-6 text-center text-sm text-slate-500">No messages yet.</p>
+          </div>
+        </section>
+
+        <!-- News -->
+        <section id="tab-news" class="dash-panel mt-6 hidden">
+          <div class="flex justify-end"><button type="button" data-add="news" class="btn-secondary mb-4">+ New Post</button></div>
+          <div id="news-list" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+        </section>
+
+        <!-- Programs -->
+        <section id="tab-programs" class="dash-panel mt-6 hidden">
+          <div class="flex justify-end"><button type="button" data-add="programs" class="btn-secondary mb-4">+ New Program</button></div>
+          <div id="programs-list" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+        </section>
+
+        <!-- Gallery -->
+        <section id="tab-gallery" class="dash-panel mt-6 hidden">
+          <div class="flex justify-end"><button type="button" data-add="gallery" class="btn-secondary mb-4">+ New Item</button></div>
+          <div id="gallery-list" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+        </section>
+
+        <!-- Departments -->
+        <section id="tab-departments" class="dash-panel mt-6 hidden">
+          <div class="flex justify-end"><button type="button" data-add="departments" class="btn-secondary mb-4">+ New Department</button></div>
+          <div id="departments-list" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+        </section>
+
+        <!-- Media Library -->
+        <section id="tab-media" class="dash-panel mt-6 hidden">
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="btn-secondary cursor-pointer">
+              + Upload File
+              <input type="file" id="media-upload-input" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" class="hidden">
+            </label>
+          </div>
+          <div id="media-grid" class="mt-4 grid gap-4 sm:grid-cols-3 lg:grid-cols-4"></div>
+        </section>
+
+        <!-- Staff -->
+        <section id="tab-staff" class="dash-panel mt-6 hidden">
+          <div class="flex justify-end"><button type="button" data-add="staff" class="btn-secondary mb-4">+ New Staff Account</button></div>
+          <div class="card overflow-x-auto p-4">
+            <table class="w-full min-w-[640px] text-sm">
+              <thead>
+                <tr class="border-b border-slate-100 text-left text-slate-500 dark:border-primary-800 dark:text-slate-400">
+                  <th class="py-2 pr-4">Name</th><th class="py-2 pr-4">Email</th><th class="py-2 pr-4">Role</th>
+                  <th class="py-2 pr-4">Status</th><th class="py-2 pr-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="staff-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Audit Log -->
+        <section id="tab-audit" class="dash-panel mt-6 hidden">
+          <div class="card overflow-x-auto p-4">
+            <table class="w-full min-w-[720px] text-sm">
+              <thead>
+                <tr class="border-b border-slate-100 text-left text-slate-500 dark:border-primary-800 dark:text-slate-400">
+                  <th class="py-2 pr-4">When</th><th class="py-2 pr-4">Staff</th><th class="py-2 pr-4">Action</th>
+                  <th class="py-2 pr-4">Entity</th><th class="py-2 pr-4">Details</th>
+                </tr>
+              </thead>
+              <tbody id="audit-body"></tbody>
+            </table>
+            <p id="audit-empty" class="hidden py-6 text-center text-sm text-slate-500">No activity recorded yet.</p>
+          </div>
+        </section>
+
+        <!-- Settings -->
+        <section id="tab-settings" class="dash-panel mt-6 hidden">
+          <div class="card max-w-xl p-6">
+            <h2 class="text-lg font-bold text-primary-900 dark:text-white">Website Settings</h2>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Changes apply site-wide (contact links update automatically; other fields are available via the public API for future use).</p>
+            <form id="settings-form" class="mt-4 space-y-4"></form>
+          </div>
+        </section>
+
+        <!-- Account -->
+        <section id="tab-account" class="dash-panel mt-6 hidden">
+          <div class="card max-w-md p-6">
+            <h2 class="text-lg font-bold text-primary-900 dark:text-white">Change Password</h2>
+            <form id="password-form" class="mt-4 space-y-4">
+              <div>
+                <label for="current-password" class="form-label">Current Password</label>
+                <input id="current-password" name="current_password" type="password" required class="form-input">
+              </div>
+              <div>
+                <label for="new-password" class="form-label">New Password</label>
+                <input id="new-password" name="new_password" type="password" required minlength="8" class="form-input">
+              </div>
+              <button type="submit" class="btn-secondary">Update Password</button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Edit/Create modal (shared by News / Programs / Gallery) -->
+  <div id="modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-primary-950/70 p-4">
+    <div class="w-full max-w-lg rounded-2xl bg-white p-6 dark:bg-primary-900">
+      <h3 id="modal-title" class="text-lg font-bold text-primary-900 dark:text-white">Edit</h3>
+      <form id="modal-form" class="mt-4 space-y-4"></form>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    const GRADIENTS = [
+      'from-primary-700 to-primary-900', 'from-gold-500 to-gold-700', 'from-primary-500 to-primary-800',
+      'from-primary-700 to-primary-950', 'from-gold-600 to-primary-800', 'from-primary-600 to-primary-900',
+      'from-gold-400 to-gold-600', 'from-primary-700 to-gold-700', 'from-primary-800 to-primary-950',
+    ];
+
+    async function api(path, options = {}) {
+      const res = await fetch(path, {
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        ...options,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Request failed.');
+      return data;
+    }
+
+    async function uploadMedia(file, purpose) {
+      const form = new FormData();
+      form.append('file', file);
+      form.append('purpose', purpose);
+      const res = await fetch('/api/admin/media', { method: 'POST', credentials: 'include', body: form });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Upload failed.');
+      return data;
+    }
+
+    /* ---------- RBAC (mirrors worker/rbac.js) ---------- */
+    const PERMISSIONS = {
+      dashboard: ['super_admin', 'registrar', 'finance', 'staff'],
+      applications: ['super_admin', 'registrar'],
+      students: ['super_admin', 'registrar'],
+      messages: ['super_admin', 'registrar', 'staff'],
+      content: ['super_admin', 'staff'],
+      departments: ['super_admin', 'registrar'],
+      media: ['super_admin', 'registrar', 'staff'],
+      staff_management: ['super_admin'],
+      audit_logs: ['super_admin'],
+      settings: ['super_admin'],
+      account: ['super_admin', 'registrar', 'finance', 'staff'],
+    };
+    let currentUser = null;
+    let allDepartments = [];
+    function can(resource) {
+      return (PERMISSIONS[resource] || []).includes(currentUser?.role);
+    }
+
+    /* ---------- Auth gate ---------- */
+    (async () => {
+      try {
+        const { user } = await api('/api/me');
+        if (user.user_type !== 'staff') throw new Error('not staff');
+        currentUser = user;
+        document.getElementById('welcome-name').textContent = user.full_name || 'Staff';
+        document.getElementById('dashboard-content').classList.remove('hidden');
+        initTabs();
+        initSisSubtabs();
+        loadStats();
+        api('/api/departments').then((d) => { allDepartments = d.items; }).catch(() => {});
+      } catch {
+        document.getElementById('auth-gate').classList.remove('hidden');
+      }
+    })();
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await api('/api/auth/logout', { method: 'POST' });
+      window.location.href = 'staff-portal.html';
+    });
+
+    /* ---------- Installable desktop/mobile app ---------- */
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('staff-sw.js').catch(() => {});
+    }
+    let deferredInstallPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      document.getElementById('install-app-btn').classList.remove('hidden');
+    });
+    document.getElementById('install-app-btn').addEventListener('click', async () => {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      document.getElementById('install-app-btn').classList.add('hidden');
+    });
+    window.addEventListener('appinstalled', () => {
+      document.getElementById('install-app-btn').classList.add('hidden');
+    });
+
+    /* ---------- Tabs ---------- */
+    const TAB_SELECTED_CLASSES = ['bg-primary-800', 'text-white', 'border-primary-800', 'dark:bg-gold-500', 'dark:text-primary-900', 'dark:border-gold-500'];
+
+    function setTabSelected(tab, selected) {
+      tab.setAttribute('aria-selected', String(selected));
+      tab.classList.toggle('text-primary-800', !selected);
+      tab.classList.toggle('dark:text-white', !selected);
+      TAB_SELECTED_CLASSES.forEach((cls) => tab.classList.toggle(cls, selected));
+    }
+
+    function initTabs() {
+      const loaders = {
+        dashboard: loadStats, applications: loadApplications, messages: loadMessages,
+        news: loadNews, programs: loadPrograms, gallery: loadGallery,
+        departments: loadDepartments, staff: loadStaff, audit: loadAuditLog,
+        students: loadStudentsTabData, media: loadMedia, settings: loadSettings,
+      };
+      const allTabs = Array.from(document.querySelectorAll('[data-tab]'));
+      const tabs = allTabs.filter((tab) => {
+        const allowed = can(tab.dataset.resource);
+        if (!allowed) tab.remove();
+        return allowed;
+      });
+      tabs.forEach((tab, i) => {
+        setTabSelected(tab, i === 0);
+        tab.addEventListener('click', () => {
+          tabs.forEach((t) => setTabSelected(t, false));
+          setTabSelected(tab, true);
+          document.querySelectorAll('.dash-panel').forEach((p) => p.classList.add('hidden'));
+          document.getElementById(`tab-${tab.dataset.tab}`).classList.remove('hidden');
+          loaders[tab.dataset.tab]?.();
+        });
+      });
+    }
+
+    /* ---------- Dashboard ---------- */
+    async function loadStats() {
+      const stats = await api('/api/admin/stats');
+      const cards = [
+        { label: 'Applications', value: stats.applications.total, sub: `${stats.applications.new} new`, show: can('applications') },
+        { label: 'Students', value: stats.students.total, sub: 'registered', show: true },
+        { label: 'Messages', value: stats.messages.total, sub: `${stats.messages.new} new`, show: can('messages') },
+        { label: 'News Posts', value: stats.news.total, sub: `${stats.news.published} published`, show: can('content') },
+        { label: 'Programs', value: stats.programs.total, sub: `${stats.programs.published} published`, show: can('content') },
+        { label: 'Gallery Items', value: stats.gallery.total, sub: `${stats.gallery.published} published`, show: can('content') },
+        { label: 'Active Staff', value: stats.staff.total, sub: 'accounts', show: can('staff_management') },
+      ].filter((c) => c.show);
+      document.getElementById('stats-grid').innerHTML = cards.map((c) => `
+        <div class="card p-5">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">${escapeHtml(c.label)}</p>
+          <p class="mt-2 text-3xl font-display font-extrabold text-primary-900 dark:text-white">${c.value}</p>
+          <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">${escapeHtml(c.sub)}</p>
+        </div>`).join('');
+    }
+
+    /* ---------- Applications ---------- */
+    async function loadApplications() {
+      const { items } = await api('/api/admin/applications');
+      const body = document.getElementById('applications-body');
+      document.getElementById('applications-empty').classList.toggle('hidden', items.length > 0);
+      body.innerHTML = items.map((a) => `
+        <tr class="border-b border-slate-50 dark:border-primary-900">
+          <td class="py-2 pr-4 font-medium text-primary-900 dark:text-white">${escapeHtml(a.full_name)}</td>
+          <td class="py-2 pr-4">${escapeHtml(a.email)}</td>
+          <td class="py-2 pr-4">${escapeHtml(a.school)}</td>
+          <td class="py-2 pr-4">${escapeHtml(a.schedule)}</td>
+          <td class="py-2 pr-4">${new Date(a.created_at).toLocaleDateString()}</td>
+          <td class="py-2 pr-4">
+            <select data-status-select="applications" data-id="${a.id}" class="form-input !py-1 !text-xs">
+              ${['new', 'reviewed', 'accepted', 'rejected'].map((s) => `<option value="${s}" ${s === a.status ? 'selected' : ''}>${s}</option>`).join('')}
+            </select>
+          </td>
+        </tr>`).join('');
+      body.querySelectorAll('[data-status-select="applications"]').forEach((sel) => {
+        sel.addEventListener('change', async () => {
+          await api(`/api/admin/applications/${sel.dataset.id}`, { method: 'PATCH', body: JSON.stringify({ status: sel.value }) });
+        });
+      });
+    }
+
+    /* ---------- Students (SIS) ---------- */
+    let allPrograms = [];
+    function debounce(fn, ms) {
+      let t;
+      return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+    }
+
+    async function loadStudentsTabData() {
+      if (!allPrograms.length) {
+        try { allPrograms = (await api('/api/programs')).items; } catch { allPrograms = []; }
+      }
+      const opts = allPrograms.map((p) => `<option value="${p.id}">${escapeHtml(p.title)} (${escapeHtml(p.school)})</option>`).join('');
+      document.getElementById('courses-program-select').innerHTML = opts;
+      loadStudents();
+    }
+
+    function initSisSubtabs() {
+      const subtabs = document.querySelectorAll('.sis-subtab');
+      const panels = { directory: 'sis-directory', courses: 'sis-courses', attendance: 'sis-attendance', grades: 'sis-grades' };
+      subtabs.forEach((tab, i) => {
+        tab.classList.toggle('bg-primary-800', i === 0);
+        tab.classList.toggle('text-white', i === 0);
+        tab.addEventListener('click', () => {
+          subtabs.forEach((t) => t.classList.remove('bg-primary-800', 'text-white'));
+          tab.classList.add('bg-primary-800', 'text-white');
+          Object.values(panels).forEach((id) => document.getElementById(id).classList.add('hidden'));
+          document.getElementById('student-detail').classList.add('hidden');
+          document.getElementById(panels[tab.dataset.subtab]).classList.remove('hidden');
+          if (tab.dataset.subtab === 'courses') loadCourses();
+          if (tab.dataset.subtab === 'attendance') loadCourseOptionsFor('attendance-course-select');
+          if (tab.dataset.subtab === 'grades') loadCourseOptionsFor('grades-course-select');
+        });
+      });
+    }
+
+    async function loadCourseOptionsFor(selectId) {
+      const { items } = await api('/api/admin/courses');
+      const programById = Object.fromEntries(allPrograms.map((p) => [p.id, p]));
+      document.getElementById(selectId).innerHTML = items.map((c) => {
+        const prog = programById[c.program_id];
+        return `<option value="${c.id}">${escapeHtml(c.code)} - ${escapeHtml(c.title)}${prog ? ' (' + escapeHtml(prog.title) + ')' : ''}</option>`;
+      }).join('') || '<option value="">No courses yet</option>';
+    }
+
+    async function loadStudents() {
+      const q = document.getElementById('student-search').value.trim();
+      const { items } = await api(`/api/admin/students${q ? '?q=' + encodeURIComponent(q) : ''}`);
+      document.getElementById('students-body').innerHTML = items.map((s) => `
+        <tr class="border-b border-slate-50 dark:border-primary-900">
+          <td class="py-2 pr-4">${escapeHtml(s.student_number || '—')}</td>
+          <td class="py-2 pr-4 font-medium text-primary-900 dark:text-white">${escapeHtml(s.full_name)}</td>
+          <td class="py-2 pr-4">${escapeHtml(s.email)}</td>
+          <td class="py-2 pr-4">${escapeHtml(s.school || '—')}</td>
+          <td class="py-2 pr-4"><button type="button" class="btn-ghost !px-2 !py-1 text-xs" data-view-student="${s.id}">View</button></td>
+        </tr>`).join('') || '<tr><td colspan="5" class="py-4 text-center text-slate-500">No students found.</td></tr>';
+      document.querySelectorAll('[data-view-student]').forEach((btn) => {
+        btn.addEventListener('click', () => viewStudent(btn.dataset.viewStudent));
+      });
+    }
+    document.getElementById('student-search').addEventListener('input', debounce(loadStudents, 300));
+
+    async function viewStudent(id) {
+      const data = await api(`/api/admin/students/${id}`);
+      const panel = document.getElementById('student-detail');
+      panel.classList.remove('hidden');
+      const programOptions = allPrograms.map((p) => `<option value="${p.id}">${escapeHtml(p.title)}</option>`).join('');
+      panel.innerHTML = `
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-primary-900 dark:text-white">${escapeHtml(data.student.full_name)}</h3>
+            <p class="text-sm text-slate-500">${escapeHtml(data.student.email)} &middot; ${escapeHtml(data.student.student_number || '')}</p>
+          </div>
+          <button type="button" id="close-student-detail" class="btn-ghost !px-3 !py-1 text-xs">Close</button>
+        </div>
+        <div class="mt-4 flex flex-wrap items-end gap-2">
+          <div><label class="form-label">Enroll in Program</label><select id="enroll-program-select" class="form-input">${programOptions}</select></div>
+          <button type="button" id="enroll-btn" class="btn-secondary">Enroll</button>
+        </div>
+        <h4 class="mt-4 font-semibold text-primary-900 dark:text-white">Enrollments</h4>
+        <div class="mt-2 space-y-2">
+          ${data.enrollments.map((e) => `
+            <div class="flex items-center justify-between rounded-lg border border-slate-100 p-3 text-sm dark:border-primary-800">
+              <span>${escapeHtml(e.program_title)} <span class="text-xs text-slate-500">(${escapeHtml(e.school)})</span></span>
+              <select data-enrollment-status="${e.id}" class="form-input !py-1 !text-xs !w-auto">
+                ${['active', 'completed', 'withdrawn'].map((s) => `<option value="${s}" ${s === e.status ? 'selected' : ''}>${s}</option>`).join('')}
+              </select>
+            </div>`).join('') || '<p class="text-sm text-slate-500">Not enrolled in any program yet.</p>'}
+        </div>
+        <h4 class="mt-4 font-semibold text-primary-900 dark:text-white">Grades</h4>
+        <table class="mt-2 w-full text-sm">
+          <tbody>
+            ${data.grades.map((g) => `<tr><td class="py-1 pr-4">${escapeHtml(g.code)} - ${escapeHtml(g.title)}</td><td class="py-1 pr-4">${g.score ?? '—'}</td><td class="py-1">${escapeHtml(g.grade || '—')}</td></tr>`).join('') || '<tr><td class="py-1 text-slate-500">No grades recorded yet.</td></tr>'}
+          </tbody>
+        </table>`;
+      document.getElementById('close-student-detail').addEventListener('click', () => panel.classList.add('hidden'));
+      document.getElementById('enroll-btn').addEventListener('click', async () => {
+        try {
+          await api('/api/admin/enrollments', { method: 'POST', body: JSON.stringify({ student_id: id, program_id: document.getElementById('enroll-program-select').value }) });
+          viewStudent(id);
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+      panel.querySelectorAll('[data-enrollment-status]').forEach((sel) => {
+        sel.addEventListener('change', async () => {
+          await api(`/api/admin/enrollments/${sel.dataset.enrollmentStatus}`, { method: 'PATCH', body: JSON.stringify({ status: sel.value }) });
+        });
+      });
+    }
+
+    async function loadCourses() {
+      const programId = document.getElementById('courses-program-select').value;
+      if (!programId) { document.getElementById('courses-body').innerHTML = ''; return; }
+      const { items } = await api(`/api/admin/courses?program_id=${programId}`);
+      document.getElementById('courses-body').innerHTML = items.map((c) => `
+        <tr class="border-b border-slate-50 dark:border-primary-900">
+          <td class="py-2 pr-4">${escapeHtml(c.code)}</td>
+          <td class="py-2 pr-4">${escapeHtml(c.title)}</td>
+          <td class="py-2 pr-4">${c.credit_hours}</td>
+          <td class="py-2 pr-4">${escapeHtml(c.term || '—')}</td>
+          <td class="py-2 pr-4 space-x-1 whitespace-nowrap">
+            <button type="button" class="btn-ghost !px-2 !py-1 text-xs" data-edit-course="${c.id}">Edit</button>
+            <button type="button" class="btn-ghost !px-2 !py-1 text-xs text-red-600" data-delete-course="${c.id}">Delete</button>
+          </td>
+        </tr>`).join('') || '<tr><td colspan="5" class="py-4 text-center text-slate-500">No courses yet.</td></tr>';
+      document.querySelectorAll('[data-edit-course]').forEach((btn) => {
+        btn.addEventListener('click', () => openCourseModal(items.find((c) => String(c.id) === btn.dataset.editCourse)));
+      });
+      document.querySelectorAll('[data-delete-course]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('Delete this course?')) return;
+          await api(`/api/admin/courses/${btn.dataset.deleteCourse}`, { method: 'DELETE' });
+          loadCourses();
+        });
+      });
+    }
+    document.getElementById('courses-program-select').addEventListener('change', loadCourses);
+    document.getElementById('add-course-btn').addEventListener('click', () => openCourseModal(null));
+
+    function openCourseModal(item) {
+      modalTitle.textContent = item ? 'Edit Course' : 'New Course';
+      const programId = document.getElementById('courses-program-select').value;
+      modalForm.innerHTML = `
+        <div><label class="form-label">Code</label><input name="code" required class="form-input" value="${escapeAttr(item?.code)}"></div>
+        <div><label class="form-label">Title</label><input name="title" required class="form-input" value="${escapeAttr(item?.title)}"></div>
+        <div><label class="form-label">Credit Hours</label><input name="credit_hours" type="number" class="form-input" value="${item?.credit_hours ?? 0}"></div>
+        <div><label class="form-label">Term</label><input name="term" class="form-input" value="${escapeAttr(item?.term)}"></div>
+        <input type="hidden" name="program_id" value="${item?.program_id ?? programId}">
+        <div class="flex gap-2 pt-2"><button type="submit" class="btn-primary">Save</button><button type="button" data-cancel class="btn-ghost">Cancel</button></div>`;
+      modalForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const payload = Object.fromEntries(new FormData(modalForm).entries());
+        try {
+          if (item) await api(`/api/admin/courses/${item.id}`, { method: 'PUT', body: JSON.stringify(payload) });
+          else await api('/api/admin/courses', { method: 'POST', body: JSON.stringify(payload) });
+          closeModal();
+          loadCourses();
+        } catch (err) {
+          alert(err.message);
+        }
+      };
+      modalForm.querySelector('[data-cancel]').addEventListener('click', closeModal);
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    document.getElementById('load-attendance-btn').addEventListener('click', async () => {
+      const courseId = document.getElementById('attendance-course-select').value;
+      const date = document.getElementById('attendance-date').value;
+      if (!courseId || !date) { alert('Select a course and date first.'); return; }
+      const { items } = await api(`/api/admin/attendance?course_id=${courseId}&date=${date}`);
+      document.getElementById('attendance-body').innerHTML = items.map((r) => `
+        <tr class="border-b border-slate-50 dark:border-primary-900">
+          <td class="py-2 pr-4">${escapeHtml(r.full_name)}</td>
+          <td class="py-2 pr-4">
+            <select data-attendance-student="${r.student_id}" class="form-input !py-1 !text-xs">
+              ${['present', 'absent', 'late', 'excused'].map((s) => `<option value="${s}" ${s === r.status ? 'selected' : ''}>${s}</option>`).join('')}
+            </select>
+          </td>
+        </tr>`).join('') || `<tr><td colspan="2" class="py-4 text-center text-slate-500">No students actively enrolled in this course's program.</td></tr>`;
+      document.getElementById('save-attendance-btn').classList.toggle('hidden', items.length === 0);
+    });
+    document.getElementById('save-attendance-btn').addEventListener('click', async () => {
+      const courseId = document.getElementById('attendance-course-select').value;
+      const date = document.getElementById('attendance-date').value;
+      const records = Array.from(document.querySelectorAll('[data-attendance-student]')).map((sel) => ({ student_id: Number(sel.dataset.attendanceStudent), status: sel.value }));
+      try {
+        await api('/api/admin/attendance', { method: 'POST', body: JSON.stringify({ course_id: courseId, date, records }) });
+        alert('Attendance saved.');
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    document.getElementById('load-grades-btn').addEventListener('click', async () => {
+      const courseId = document.getElementById('grades-course-select').value;
+      if (!courseId) { alert('Select a course first.'); return; }
+      const { items } = await api(`/api/admin/grades?course_id=${courseId}`);
+      document.getElementById('grades-body').innerHTML = items.map((r) => `
+        <tr class="border-b border-slate-50 dark:border-primary-900" data-grade-row="${r.student_id}">
+          <td class="py-2 pr-4">${escapeHtml(r.full_name)}</td>
+          <td class="py-2 pr-4"><input type="number" step="0.1" class="form-input !py-1 !w-20" data-grade-score value="${r.score ?? ''}"></td>
+          <td class="py-2 pr-4"><input type="text" class="form-input !py-1 !w-20" data-grade-letter value="${escapeAttr(r.grade)}"></td>
+          <td class="py-2 pr-4"><input type="text" class="form-input !py-1" data-grade-remarks value="${escapeAttr(r.remarks)}"></td>
+        </tr>`).join('') || `<tr><td colspan="4" class="py-4 text-center text-slate-500">No students actively enrolled in this course's program.</td></tr>`;
+      document.getElementById('save-grades-btn').classList.toggle('hidden', items.length === 0);
+    });
+    document.getElementById('save-grades-btn').addEventListener('click', async () => {
+      const courseId = document.getElementById('grades-course-select').value;
+      const rows = document.querySelectorAll('[data-grade-row]');
+      try {
+        for (const row of rows) {
+          const studentId = row.dataset.gradeRow;
+          const score = row.querySelector('[data-grade-score]').value;
+          const grade = row.querySelector('[data-grade-letter]').value;
+          const remarks = row.querySelector('[data-grade-remarks]').value;
+          await api('/api/admin/grades', { method: 'POST', body: JSON.stringify({ student_id: studentId, course_id: courseId, score: score === '' ? null : Number(score), grade: grade || null, remarks: remarks || null }) });
+        }
+        alert('Grades saved.');
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    /* ---------- Messages ---------- */
+    async function loadMessages() {
+      const { items } = await api('/api/admin/messages');
+      const body = document.getElementById('messages-body');
+      document.getElementById('messages-empty').classList.toggle('hidden', items.length > 0);
+      body.innerHTML = items.map((m) => `
+        <tr class="border-b border-slate-50 dark:border-primary-900">
+          <td class="py-2 pr-4 font-medium text-primary-900 dark:text-white">${escapeHtml(m.name)}</td>
+          <td class="py-2 pr-4">${escapeHtml(m.email)}</td>
+          <td class="py-2 pr-4">${escapeHtml(m.subject || '—')}</td>
+          <td class="py-2 pr-4 max-w-xs truncate" title="${escapeHtml(m.message)}">${escapeHtml(m.message)}</td>
+          <td class="py-2 pr-4">${new Date(m.created_at).toLocaleDateString()}</td>
+          <td class="py-2 pr-4">
+            <select data-status-select="messages" data-id="${m.id}" class="form-input !py-1 !text-xs">
+              ${['new', 'read'].map((s) => `<option value="${s}" ${s === m.status ? 'selected' : ''}>${s}</option>`).join('')}
+            </select>
+          </td>
+        </tr>`).join('');
+      body.querySelectorAll('[data-status-select="messages"]').forEach((sel) => {
+        sel.addEventListener('change', async () => {
+          await api(`/api/admin/messages/${sel.dataset.id}`, { method: 'PATCH', body: JSON.stringify({ status: sel.value }) });
+        });
+      });
+    }
+
+    /* ---------- News ---------- */
+    async function loadNews() {
+      const { items } = await api('/api/admin/news');
+      document.getElementById('news-list').innerHTML = items.map((n) => `
+        <div class="card p-5">
+          <div class="h-3 w-full rounded bg-gradient-to-r ${n.gradient}"></div>
+          <span class="badge mt-3">${escapeHtml(n.category)} · ${n.status}</span>
+          <h3 class="mt-2 font-bold text-primary-900 dark:text-white">${escapeHtml(n.title)}</h3>
+          <p class="mt-1 text-xs text-slate-500 line-clamp-2">${escapeHtml(n.excerpt || '')}</p>
+          <div class="mt-3 flex gap-2">
+            <button type="button" class="btn-ghost !px-3 !py-1 text-xs" data-edit="news" data-id="${n.id}">Edit</button>
+            <button type="button" class="btn-ghost !px-3 !py-1 text-xs text-red-600" data-delete="news" data-id="${n.id}">Delete</button>
+          </div>
+        </div>`).join('') || '<p class="text-sm text-slate-500">No news posts yet.</p>';
+      bindCardActions('news', items);
+    }
+
+    /* ---------- Programs ---------- */
+    async function loadPrograms() {
+      const { items } = await api('/api/admin/programs');
+      document.getElementById('programs-list').innerHTML = items.map((p) => `
+        <div class="card p-5">
+          <span class="badge">${escapeHtml(p.school)} · ${p.status}</span>
+          <h3 class="mt-2 font-bold text-primary-900 dark:text-white">${escapeHtml(p.title)}</h3>
+          <p class="mt-1 text-xs text-slate-500">${escapeHtml(p.level)} · ${escapeHtml(p.duration || '')}</p>
+          <div class="mt-3 flex gap-2">
+            <button type="button" class="btn-ghost !px-3 !py-1 text-xs" data-edit="programs" data-id="${p.id}">Edit</button>
+            <button type="button" class="btn-ghost !px-3 !py-1 text-xs text-red-600" data-delete="programs" data-id="${p.id}">Delete</button>
+          </div>
+        </div>`).join('') || '<p class="text-sm text-slate-500">No programs yet.</p>';
+      bindCardActions('programs', items);
+    }
+
+    /* ---------- Gallery ---------- */
+    async function loadGallery() {
+      const { items } = await api('/api/admin/gallery');
+      document.getElementById('gallery-list').innerHTML = items.map((g) => `
+        <div class="card p-5">
+          ${g.media_id
+            ? `<img src="/api/media/${g.media_id}" alt="${escapeAttr(g.caption)}" class="aspect-video w-full rounded-lg object-cover">`
+            : `<div class="aspect-video w-full rounded-lg bg-gradient-to-br ${g.gradient} flex items-center justify-center text-white text-sm font-semibold">${escapeHtml(g.caption)}</div>`}
+          <span class="badge mt-3">${escapeHtml(g.category)} · ${g.status}</span>
+          <div class="mt-3 flex gap-2">
+            <button type="button" class="btn-ghost !px-3 !py-1 text-xs" data-edit="gallery" data-id="${g.id}">Edit</button>
+            <button type="button" class="btn-ghost !px-3 !py-1 text-xs text-red-600" data-delete="gallery" data-id="${g.id}">Delete</button>
+          </div>
+        </div>`).join('') || '<p class="text-sm text-slate-500">No gallery items yet.</p>';
+      bindCardActions('gallery', items);
+    }
+
+    /* ---------- Departments ---------- */
+    async function loadDepartments() {
+      const { items } = await api('/api/admin/departments');
+      document.getElementById('departments-list').innerHTML = items.map((d) => `
+        <div class="card p-5">
+          <span class="badge">${escapeHtml(d.key)}</span>
+          <h3 class="mt-2 font-bold text-primary-900 dark:text-white">${escapeHtml(d.name)}</h3>
+          <p class="mt-1 text-xs text-slate-500 line-clamp-2">${escapeHtml(d.description || '')}</p>
+          <div class="mt-3 flex gap-2">
+            <button type="button" class="btn-ghost !px-3 !py-1 text-xs" data-edit="departments" data-id="${d.id}">Edit</button>
+            <button type="button" class="btn-ghost !px-3 !py-1 text-xs text-red-600" data-delete="departments" data-id="${d.id}">Delete</button>
+          </div>
+        </div>`).join('') || '<p class="text-sm text-slate-500">No departments yet.</p>';
+      bindCardActions('departments', items);
+    }
+
+    /* ---------- Media Library ---------- */
+    async function loadMedia() {
+      const { items } = await api('/api/admin/media');
+      document.getElementById('media-grid').innerHTML = items.map((m) => `
+        <div class="card p-3">
+          ${m.content_type.startsWith('image/')
+            ? `<img src="${m.url}" alt="${escapeAttr(m.filename)}" class="aspect-square w-full rounded-lg object-cover">`
+            : `<div class="flex aspect-square w-full items-center justify-center rounded-lg bg-slate-100 text-xs text-slate-500 dark:bg-primary-800">${escapeHtml(m.content_type)}</div>`}
+          <p class="mt-2 truncate text-xs text-slate-500" title="${escapeAttr(m.filename)}">${escapeHtml(m.filename)}</p>
+          <p class="text-[10px] uppercase tracking-wide text-slate-400">${escapeHtml(m.purpose)} &middot; ${(m.size / 1024).toFixed(0)} KB</p>
+          <button type="button" class="btn-ghost !px-2 !py-1 mt-1 text-xs text-red-600" data-delete-media="${m.id}">Delete</button>
+        </div>`).join('') || '<p class="text-sm text-slate-500">No files uploaded yet.</p>';
+      document.querySelectorAll('[data-delete-media]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('Delete this file? Anything referencing it (e.g. a gallery item) will lose its image.')) return;
+          await api(`/api/admin/media/${btn.dataset.deleteMedia}`, { method: 'DELETE' });
+          loadMedia();
+        });
+      });
+    }
+    document.getElementById('media-upload-input').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        await uploadMedia(file, 'general');
+        loadMedia();
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        e.target.value = '';
+      }
+    });
+
+    /* ---------- Staff / user management ---------- */
+    async function loadStaff() {
+      const { items } = await api('/api/admin/staff');
+      const body = document.getElementById('staff-body');
+      body.innerHTML = items.map((s) => `
+        <tr class="border-b border-slate-50 dark:border-primary-900">
+          <td class="py-2 pr-4 font-medium text-primary-900 dark:text-white">${escapeHtml(s.full_name)}</td>
+          <td class="py-2 pr-4">${escapeHtml(s.email)}</td>
+          <td class="py-2 pr-4">${escapeHtml(s.role)}</td>
+          <td class="py-2 pr-4">${s.active ? '<span class="text-green-600">Active</span>' : '<span class="text-red-600">Deactivated</span>'}</td>
+          <td class="py-2 pr-4 space-x-1 whitespace-nowrap">
+            <button type="button" class="btn-ghost !px-2 !py-1 text-xs" data-edit="staff" data-id="${s.id}">Edit</button>
+            <button type="button" class="btn-ghost !px-2 !py-1 text-xs" data-reset-password data-id="${s.id}">Reset Password</button>
+            <button type="button" class="btn-ghost !px-2 !py-1 text-xs text-red-600" data-delete="staff" data-id="${s.id}">Delete</button>
+          </td>
+        </tr>`).join('');
+      bindCardActions('staff', items);
+      body.querySelectorAll('[data-reset-password]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const newPassword = prompt('Enter a new temporary password for this staff member (min 8 characters):');
+          if (!newPassword) return;
+          try {
+            await api(`/api/admin/staff/${btn.dataset.id}/password`, { method: 'PATCH', body: JSON.stringify({ new_password: newPassword }) });
+            alert('Password reset. Share the new password with the staff member securely.');
+          } catch (err) {
+            alert(err.message);
+          }
+        });
+      });
+    }
+
+    /* ---------- Audit Log ---------- */
+    async function loadAuditLog() {
+      const { items } = await api('/api/admin/audit-logs');
+      const body = document.getElementById('audit-body');
+      document.getElementById('audit-empty').classList.toggle('hidden', items.length > 0);
+      body.innerHTML = items.map((a) => `
+        <tr class="border-b border-slate-50 dark:border-primary-900">
+          <td class="py-2 pr-4 whitespace-nowrap">${new Date(a.created_at).toLocaleString()}</td>
+          <td class="py-2 pr-4">${escapeHtml(a.staff_name)}</td>
+          <td class="py-2 pr-4">${escapeHtml(a.action)}</td>
+          <td class="py-2 pr-4">${escapeHtml(a.entity_type)}${a.entity_id ? ` #${escapeHtml(a.entity_id)}` : ''}</td>
+          <td class="py-2 pr-4 max-w-xs truncate text-xs text-slate-500" title="${escapeHtml(a.details || '')}">${escapeHtml(a.details || '')}</td>
+        </tr>`).join('');
+    }
+
+    /* ---------- Settings ---------- */
+    const SETTINGS_LABELS = {
+      contact_email: 'Contact Email',
+      contact_phone: 'Contact Phone',
+      contact_address: 'Contact Address',
+      site_tagline: 'Site Tagline',
+      social_facebook: 'Facebook URL',
+      social_twitter: 'Twitter / X URL',
+      social_instagram: 'Instagram URL',
+      office_hours: 'Office Hours',
+    };
+    async function loadSettings() {
+      const { items } = await api('/api/admin/settings');
+      const form = document.getElementById('settings-form');
+      form.innerHTML = items.map((s) => `
+        <div>
+          <label class="form-label">${escapeHtml(SETTINGS_LABELS[s.key] || s.key)}</label>
+          <input name="${escapeAttr(s.key)}" class="form-input" value="${escapeAttr(s.value)}">
+        </div>`).join('') + '<button type="submit" class="btn-primary">Save Settings</button>';
+      form.onsubmit = async (e) => {
+        e.preventDefault();
+        const payload = Object.fromEntries(new FormData(form).entries());
+        try {
+          await api('/api/admin/settings', { method: 'PATCH', body: JSON.stringify(payload) });
+          alert('Settings updated.');
+        } catch (err) {
+          alert(err.message);
+        }
+      };
+    }
+
+    function bindCardActions(type, items) {
+      document.querySelectorAll(`[data-edit="${type}"]`).forEach((btn) => {
+        btn.addEventListener('click', () => openModal(type, items.find((i) => String(i.id) === btn.dataset.id)));
+      });
+      document.querySelectorAll(`[data-delete="${type}"]`).forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('Delete this item?')) return;
+          try {
+            await api(`/api/admin/${type}/${btn.dataset.id}`, { method: 'DELETE' });
+            reloadTab(type);
+          } catch (err) {
+            alert(err.message);
+          }
+        });
+      });
+    }
+
+    document.querySelectorAll('[data-add]').forEach((btn) => {
+      btn.addEventListener('click', () => openModal(btn.dataset.add, null));
+    });
+
+    function reloadTab(type) {
+      ({ news: loadNews, programs: loadPrograms, gallery: loadGallery, departments: loadDepartments, staff: loadStaff })[type]?.();
+    }
+
+    /* ---------- Modal (create/edit) ---------- */
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalForm = document.getElementById('modal-form');
+
+    function gradientOptions(selected) {
+      return GRADIENTS.map((g) => `<option value="${g}" ${g === selected ? 'selected' : ''}>${g}</option>`).join('');
+    }
+
+    function openModal(type, item) {
+      modalTitle.textContent = `${item ? 'Edit' : 'New'} ${type.slice(0, 1).toUpperCase()}${type.slice(1)}`;
+      const isEdit = Boolean(item);
+
+      if (type === 'news') {
+        modalForm.innerHTML = `
+          <div><label class="form-label">Title</label><input name="title" required class="form-input" value="${escapeAttr(item?.title)}"></div>
+          <div><label class="form-label">Category</label><input name="category" required class="form-input" value="${escapeAttr(item?.category)}"></div>
+          <div><label class="form-label">Excerpt</label><textarea name="excerpt" rows="2" class="form-input">${escapeHtml(item?.excerpt || '')}</textarea></div>
+          <div><label class="form-label">Body</label><textarea name="body" rows="4" class="form-input">${escapeHtml(item?.body || '')}</textarea></div>
+          <div><label class="form-label">Gradient</label><select name="gradient" class="form-input">${gradientOptions(item?.gradient)}</select></div>
+          <div><label class="form-label">Status</label><select name="status" class="form-input">
+            <option value="draft" ${item?.status === 'draft' ? 'selected' : ''}>draft</option>
+            <option value="published" ${item?.status === 'published' ? 'selected' : ''}>published</option>
+          </select></div>
+          <div class="flex gap-2 pt-2"><button type="submit" class="btn-primary">Save</button><button type="button" data-cancel class="btn-ghost">Cancel</button></div>`;
+      } else if (type === 'programs') {
+        const schools = allDepartments.length ? allDepartments.map((d) => d.key) : ['english', 'it', 'engineering', 'social-services', 'health'];
+        modalForm.innerHTML = `
+          <div><label class="form-label">School</label><select name="school" class="form-input">${schools.map((s) => `<option value="${s}" ${s === item?.school ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+          <div><label class="form-label">Level</label><input name="level" required class="form-input" value="${escapeAttr(item?.level)}"></div>
+          <div><label class="form-label">Title</label><input name="title" required class="form-input" value="${escapeAttr(item?.title)}"></div>
+          <div><label class="form-label">Duration</label><input name="duration" class="form-input" value="${escapeAttr(item?.duration)}"></div>
+          <div><label class="form-label">Description</label><textarea name="description" rows="3" class="form-input">${escapeHtml(item?.description || '')}</textarea></div>
+          <div><label class="form-label">Sort Order</label><input name="sort_order" type="number" class="form-input" value="${item?.sort_order ?? 0}"></div>
+          <div><label class="form-label">Status</label><select name="status" class="form-input">
+            <option value="published" ${item?.status === 'published' ? 'selected' : ''}>published</option>
+            <option value="draft" ${item?.status === 'draft' ? 'selected' : ''}>draft</option>
+          </select></div>
+          <div class="flex gap-2 pt-2"><button type="submit" class="btn-primary">Save</button><button type="button" data-cancel class="btn-ghost">Cancel</button></div>`;
+      } else if (type === 'gallery') {
+        modalForm.innerHTML = `
+          <div><label class="form-label">Category</label><input name="category" required class="form-input" value="${escapeAttr(item?.category)}"></div>
+          <div><label class="form-label">Caption</label><input name="caption" required class="form-input" value="${escapeAttr(item?.caption)}"></div>
+          <div><label class="form-label">Photo (optional — leave blank to keep the gradient placeholder)</label><input type="file" name="photo" accept="image/png,image/jpeg,image/webp,image/gif" class="form-input">
+            ${item?.media_id ? `<img src="/api/media/${item.media_id}" class="mt-2 h-20 rounded-lg object-cover">` : ''}
+          </div>
+          <div><label class="form-label">Gradient (used if no photo is uploaded)</label><select name="gradient" class="form-input">${gradientOptions(item?.gradient)}</select></div>
+          <div><label class="form-label">Sort Order</label><input name="sort_order" type="number" class="form-input" value="${item?.sort_order ?? 0}"></div>
+          <div><label class="form-label">Status</label><select name="status" class="form-input">
+            <option value="published" ${item?.status === 'published' ? 'selected' : ''}>published</option>
+            <option value="draft" ${item?.status === 'draft' ? 'selected' : ''}>draft</option>
+          </select></div>
+          <input type="hidden" name="media_id" value="${item?.media_id ?? ''}">
+          <div class="flex gap-2 pt-2"><button type="submit" class="btn-primary">Save</button><button type="button" data-cancel class="btn-ghost">Cancel</button></div>`;
+      } else if (type === 'departments') {
+        modalForm.innerHTML = `
+          <div><label class="form-label">Key (slug)</label><input name="key" required pattern="[a-z0-9]+(-[a-z0-9]+)*" title="lowercase letters, numbers, and hyphens only" class="form-input" value="${escapeAttr(item?.key)}" ${isEdit ? 'readonly' : ''}></div>
+          <div><label class="form-label">Name</label><input name="name" required class="form-input" value="${escapeAttr(item?.name)}"></div>
+          <div><label class="form-label">Description</label><textarea name="description" rows="3" class="form-input">${escapeHtml(item?.description || '')}</textarea></div>
+          <div><label class="form-label">Sort Order</label><input name="sort_order" type="number" class="form-input" value="${item?.sort_order ?? 0}"></div>
+          <div class="flex gap-2 pt-2"><button type="submit" class="btn-primary">Save</button><button type="button" data-cancel class="btn-ghost">Cancel</button></div>`;
+      } else if (type === 'staff') {
+        const roles = ['super_admin', 'registrar', 'finance', 'staff'];
+        modalForm.innerHTML = `
+          <div><label class="form-label">Full Name</label><input name="full_name" required class="form-input" value="${escapeAttr(item?.full_name)}"></div>
+          <div><label class="form-label">Email</label><input name="email" type="email" required class="form-input" value="${escapeAttr(item?.email)}"></div>
+          ${isEdit ? '' : '<div><label class="form-label">Temporary Password</label><input name="password" type="password" required minlength="8" class="form-input"></div>'}
+          <div><label class="form-label">Role</label><select name="role" class="form-input">${roles.map((r) => `<option value="${r}" ${r === item?.role ? 'selected' : ''}>${r}</option>`).join('')}</select></div>
+          ${isEdit ? `<div class="flex items-center gap-2"><input type="checkbox" id="staff-active" name="active" ${item?.active ? 'checked' : ''}><label for="staff-active" class="form-label !mb-0">Active</label></div>` : ''}
+          <div class="flex gap-2 pt-2"><button type="submit" class="btn-primary">Save</button><button type="button" data-cancel class="btn-ghost">Cancel</button></div>`;
+      }
+
+      modalForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const payload = Object.fromEntries(new FormData(modalForm).entries());
+        if (type === 'staff' && isEdit) payload.active = modalForm.querySelector('[name="active"]').checked;
+        try {
+          if (type === 'gallery') {
+            const fileInput = modalForm.querySelector('[name="photo"]');
+            if (fileInput.files[0]) {
+              const uploaded = await uploadMedia(fileInput.files[0], 'gallery');
+              payload.media_id = uploaded.id;
+            }
+            delete payload.photo;
+            if (!payload.media_id) delete payload.media_id;
+          }
+          const url = isEdit ? `/api/admin/${type}/${item.id}` : `/api/admin/${type}`;
+          const method = isEdit ? 'PUT' : 'POST';
+          await api(url, { method, body: JSON.stringify(payload) });
+          closeModal();
+          reloadTab(type);
+        } catch (err) {
+          alert(err.message);
+        }
+      };
+      modalForm.querySelector('[data-cancel]').addEventListener('click', closeModal);
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    /* ---------- Account ---------- */
+    document.getElementById('password-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      try {
+        const data = await api('/api/me/password', { method: 'PATCH', body: JSON.stringify(Object.fromEntries(new FormData(form).entries())) });
+        alert(data.message || 'Password updated.');
+        form.reset();
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    /* ---------- Helpers ---------- */
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+    function escapeAttr(str) {
+      return escapeHtml(str ?? '');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "SomaliKing College (SKC)",
+  "short_name": "SKC",
+  "description": "Building Skills for a Better Future",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0b1c3a",
+  "theme_color": "#0b1c3a",
+  "icons": [
+    {
+      "src": "/images/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
