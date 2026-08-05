@@ -401,6 +401,20 @@
           replaceLinkText(el, settings.contact_phone);
         });
       }
+      const SOCIAL_LINKS = {
+        Facebook: settings.social_facebook,
+        'X (Twitter)': settings.social_twitter,
+        Instagram: settings.social_instagram,
+        LinkedIn: settings.social_linkedin,
+      };
+      Object.entries(SOCIAL_LINKS).forEach(([label, url]) => {
+        if (!url) return;
+        document.querySelectorAll(`a[aria-label="${label}"]`).forEach((el) => {
+          el.href = url;
+          el.target = '_blank';
+          el.rel = 'noopener noreferrer';
+        });
+      });
       document.querySelectorAll('[data-settings-field]').forEach((el) => {
         const value = settings[el.dataset.settingsField];
         if (value) el.textContent = value;

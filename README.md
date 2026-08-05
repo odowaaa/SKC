@@ -80,6 +80,7 @@ Uploads (gallery photos, student ID photos, general files) go to a Cloudflare **
 | `0005_phase3_media.sql` | `media_files`, gallery/student photo linkage |
 | `0006_phase4_settings.sql` | `site_settings` (seeded with current contact info) |
 | `0007_news_media.sql` | `news_posts.media_id` (real uploaded photo, falls back to gradient) |
+| `0008_social_linkedin.sql` | `site_settings.social_linkedin` (LinkedIn icons site-wide had no matching setting) |
 
 Seeded staff/admin account — **change this password immediately after first deploy** (Staff Dashboard → Account tab):
 - Email: `admin@somalikingcollege.edu.so`
@@ -136,6 +137,7 @@ npx wrangler d1 execute skc_db --local --file=migrations/0004_phase2_sis.sql
 npx wrangler d1 execute skc_db --local --file=migrations/0005_phase3_media.sql
 npx wrangler d1 execute skc_db --local --file=migrations/0006_phase4_settings.sql
 npx wrangler d1 execute skc_db --local --file=migrations/0007_news_media.sql
+npx wrangler d1 execute skc_db --local --file=migrations/0008_social_linkedin.sql
 
 npm run dev           # same as: npx wrangler dev --local
 ```
@@ -155,6 +157,7 @@ Then open `http://localhost:8787`. R2 is simulated locally by Wrangler automatic
    npx wrangler d1 execute skc_db --remote --file=migrations/0005_phase3_media.sql
    npx wrangler d1 execute skc_db --remote --file=migrations/0006_phase4_settings.sql
    npx wrangler d1 execute skc_db --remote --file=migrations/0007_news_media.sql
+   npx wrangler d1 execute skc_db --remote --file=migrations/0008_social_linkedin.sql
    ```
    (If your database already has earlier migrations applied from a previous deploy, just run whichever numbered files are new.)
 4. Deploy: `npx wrangler deploy`
