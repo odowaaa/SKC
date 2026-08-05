@@ -7,7 +7,7 @@ CREATE TABLE site_settings (
 );
 
 INSERT INTO site_settings (key, value) VALUES
-  ('contact_email', 'info@somalikingcollege.edu.so'),
+  ('contact_email', 'info@skc.college'),
   ('contact_phone', '+252 90 405 4460'),
   ('contact_address', 'Airport Road, Garowe, Puntland, Somalia'),
   ('site_tagline', 'Building Skills for a Better Future'),

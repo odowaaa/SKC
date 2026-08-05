@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.somalikingcollege.edu.so/sitemap.xml
+Sitemap: https://www.skc.college/sitemap.xml

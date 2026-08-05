@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.somalikingcollege.edu.so/</loc>
+    <loc>https://www.skc.college/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.somalikingcollege.edu.so/about.html</loc>
+    <loc>https://www.skc.college/about.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.somalikingcollege.edu.so/admissions.html</loc>
+    <loc>https://www.skc.college/admissions.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.somalikingcollege.edu.so/faculties.html</loc>
+    <loc>https://www.skc.college/faculties.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.somalikingcollege.edu.so/programs.html</loc>
+    <loc>https://www.skc.college/programs.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.somalikingcollege.edu.so/student-portal.html</loc>
+    <loc>https://www.skc.college/student-portal.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.somalikingcollege.edu.so/staff-portal.html</loc>
+    <loc>https://www.skc.college/staff-portal.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.somalikingcollege.edu.so/news.html</loc>
+    <loc>https://www.skc.college/news.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.somalikingcollege.edu.so/gallery.html</loc>
+    <loc>https://www.skc.college/gallery.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.somalikingcollege.edu.so/contact.html</loc>
+    <loc>https://www.skc.college/contact.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
